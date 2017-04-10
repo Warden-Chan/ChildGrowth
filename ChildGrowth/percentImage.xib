@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="percentImageView">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="95"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pimage" translatesAutoresizingMaskIntoConstraints="NO" id="APY-m5-tqo">
+                    <rect key="frame" x="23.5" y="0.0" width="328" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="Amx-Nd-7me"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pimage1" translatesAutoresizingMaskIntoConstraints="NO" id="Zy5-ki-2Jm">
+                    <rect key="frame" x="20" y="70" width="47" height="25"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="47" id="0Z1-BC-3Cn"/>
+                        <constraint firstAttribute="height" constant="25" id="RzA-QR-1vc"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RYr-fZ-LoN">
+                    <rect key="frame" x="20" y="77" width="47" height="18"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="18" id="LZy-67-GnX"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="Zy5-ki-2Jm" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="82M-iJ-hby"/>
+                <constraint firstItem="RYr-fZ-LoN" firstAttribute="width" secondItem="Zy5-ki-2Jm" secondAttribute="width" id="C5I-Lc-66A"/>
+                <constraint firstItem="APY-m5-tqo" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="F4F-t9-JeA"/>
+                <constraint firstItem="Zy5-ki-2Jm" firstAttribute="top" secondItem="APY-m5-tqo" secondAttribute="bottom" id="Poa-w7-zqf"/>
+                <constraint firstItem="RYr-fZ-LoN" firstAttribute="leading" secondItem="Zy5-ki-2Jm" secondAttribute="trailing" constant="-47" id="U6O-8m-MbY"/>
+                <constraint firstItem="RYr-fZ-LoN" firstAttribute="bottom" secondItem="Zy5-ki-2Jm" secondAttribute="bottom" id="kbf-i9-Rpw"/>
+                <constraint firstAttribute="trailing" secondItem="APY-m5-tqo" secondAttribute="trailing" constant="23.5" id="khR-Au-1Yf"/>
+                <constraint firstItem="APY-m5-tqo" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="23.5" id="oY9-ko-80R"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="label" destination="RYr-fZ-LoN" id="zUf-JA-lMV"/>
+                <outlet property="pimageLeft" destination="82M-iJ-hby" id="BpN-Tp-guf"/>
+            </connections>
+            <point key="canvasLocation" x="33" y="106"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="pimage" width="930" height="260"/>
+        <image name="pimage1" width="142" height="74"/>
+    </resources>
+</document>

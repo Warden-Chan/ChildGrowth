@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<array>
+		<dict>
+			<key>icon</key>
+			<string>MoreMyFavorites</string>
+			<key>text</key>
+			<string>我的积分</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>MoreMyFavorites</string>
+			<key>text</key>
+			<string>好大夫在线</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>MoreMyFavorites</string>
+			<key>text</key>
+			<string>收藏</string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>icon</key>
+			<string>MoreMyFavorites</string>
+			<key>text</key>
+			<string>曲线图知识介绍</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>MoreMyFavorites</string>
+			<key>text</key>
+			<string>测量教程</string>
+		</dict>
+	</array>
+	<array>
+		<dict>
+			<key>icon</key>
+			<string>MoreMyFavorites</string>
+			<key>text</key>
+			<string>问题帮助与反馈</string>
+		</dict>
+		<dict>
+			<key>icon</key>
+			<string>MoreMyFavorites</string>
+			<key>text</key>
+			<string>推荐朋友安装</string>
+		</dict>
+	</array>
+</array>
+</plist>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="View2UIButton">
+            <rect key="frame" x="0.0" y="0.0" width="125" height="75"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="QdS-Wp-mp6">
+                    <rect key="frame" x="42.5" y="0.0" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="UXz-LL-HYv"/>
+                        <constraint firstAttribute="width" constant="40" id="puW-2Q-KEn"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WT4-8v-01l">
+                    <rect key="frame" x="0.0" y="45" width="125" height="30"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="WT4-8v-01l" secondAttribute="trailing" id="4r0-CV-TNY"/>
+                <constraint firstItem="QdS-Wp-mp6" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="42.5" id="8Ev-MK-JY1"/>
+                <constraint firstItem="WT4-8v-01l" firstAttribute="top" secondItem="QdS-Wp-mp6" secondAttribute="bottom" constant="5" id="CKe-UZ-CKR"/>
+                <constraint firstAttribute="bottom" secondItem="WT4-8v-01l" secondAttribute="bottom" id="XU4-hn-Okh"/>
+                <constraint firstAttribute="trailing" secondItem="QdS-Wp-mp6" secondAttribute="trailing" constant="42.5" id="Ycd-W7-2j9"/>
+                <constraint firstItem="WT4-8v-01l" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="b2m-zH-3vc"/>
+                <constraint firstItem="QdS-Wp-mp6" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="dEE-11-dVd"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="imageview" destination="QdS-Wp-mp6" id="Ke6-Zw-Sgv"/>
+                <outlet property="lable" destination="WT4-8v-01l" id="qnc-Li-iZK"/>
+            </connections>
+            <point key="canvasLocation" x="70.5" y="-55.5"/>
+        </view>
+    </objects>
+</document>
