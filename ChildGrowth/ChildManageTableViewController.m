@@ -11,10 +11,13 @@
 #import "MJExtension.h"
 #import "MyTableViewCell.h"
 #import "settingChildViewController.h"
-@interface ChildManageTableViewController ()
+#import "AFHTTPSessionManager.h"
+#import "finalRegisterViewController.h"
+@interface ChildManageTableViewController ()<finalRegisterViewControllerDelegate>
 @property (nonatomic, strong) NSMutableArray *childs;
 @property (nonatomic, strong) CGChildModel *childmodel;
 @property(nonatomic,strong)NSMutableArray *childAges;
+@property (nonatomic,copy) NSString *token;
 @end
 
 @implementation ChildManageTableViewController
@@ -52,7 +55,9 @@ NSString * const childAddindentifier = @"childAddCell";
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
-
+-(void)viewWillAppear:(BOOL)animated{
+    [self.tableView reloadData];
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -126,13 +131,39 @@ NSString * const childAddindentifier = @"childAddCell";
 //删除功能
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     if(editingStyle == UITableViewCellEditingStyleDelete){
+        
+        //1.接口删除
+        CGChildModel *childItem = self.childs[indexPath.row];
+        [self readNSUserDefaults];
+        [self postDeletechildId:childItem.ChildId];
+        //2.本地数据删除
+        [self.childs removeObject:childItem];
+        [self writeAllChildInfortoPlist];
         [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObjects:indexPath, nil] withRowAnimation:UITableViewRowAnimationTop];
     }
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.section ==0) {
-        [self.navigationController pushViewController:[[settingChildViewController alloc]init] animated:YES];
+        settingChildViewController *newVC= [[settingChildViewController alloc]init];
+        newVC.flag = YES;
+        [self.navigationController pushViewController:newVC animated:YES];
     }
+}
+-(void)postDeletechildId:(NSString *)childId{
+    // 1.创建AFN管理者
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // 2.利用AFN管理者发送请求
+    NSDictionary *params = @{
+                             @"childID" : childId,
+                             @"token" : self.token
+                             };
+    [manager POST:@"http://192.168.1.121/childGrow/Mobile/deleteChildID" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"请求成功---%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败---%@", error);
+    }];
+    
 }
 /*
 // Override to support c onditional editing of the table view.
@@ -202,6 +233,57 @@ NSString * const childAddindentifier = @"childAddCell";
         }
     }
     return ConcreteAge;
+}
+-(void)writeAllChildInfortoPlist{
+    //    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ChildInformation" ofType:@"plist"];
+    NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    NSString *fileName = [documentsDirectory stringByAppendingPathComponent:@"ChildInformation.plist"];
+    
+    NSMutableArray *childsArr = [[NSMutableArray alloc]init];
+    for (int i=0;i<self.childs.count;i++) {
+        CGChildModel *childmodel = self.childs[i];
+        NSDictionary *childDict = childmodel.mj_keyValues;
+        [childsArr addObject:childDict];
+    }
+    //     NSLog(@"%@",childsDict);
+    [childsArr writeToFile:fileName atomically:YES];
+    
+}
+#pragma mark - addChildViewControllerDelegate
+-(void)addChildinfo:(finalRegisterViewController *)addchildinfo childItem:(CGChildModel *)childitem{
+    [self.childs addObject:childitem];
+    [self writeAllChildInfortoPlist];
+    [self.tableView reloadData];
+}
+//保存数据到NSUserDefaults
+-(void)saveNSUserDefaults
+{
+    
+    
+    //将上述数据全部存储到NSUserDefaults中
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    //存储时，除NSNumber类型使用对应的类型意外，其他的都是使用setObject:forKey:
+    //读取NSDate日期类型的数据
+    NSNumber *childindex = [userDefaults valueForKey:@"childindex"];
+    
+    NSNumber *index = [[NSNumber alloc]initWithInt:[childindex intValue]-1];
+    [userDefaults setValue:index forKey:@"childindex"];
+    
+    //这里建议同步存储到磁盘中，但是不是必须的
+    [userDefaults synchronize];
+    
+}
+//从NSUserDefaults中读取数据
+-(void)readNSUserDefaults
+{
+    NSUserDefaults *userDefaultes = [NSUserDefaults standardUserDefaults];
+    
+    //读取数据到各个label中
+    //读取整型int类型的数据
+    
+    //读取NSDate日期类型的数据
+    NSString *token = [userDefaultes valueForKey:@"token"];
+    self.token = token;
 }
 /*
 #pragma mark - Navigation

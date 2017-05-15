@@ -9,7 +9,8 @@
 #import "forgetPassWardViewController.h"
 #import "newPassWardViewController.h"
 #import "MMZCViewController.h"
-
+#import <SMS_SDK/SMSSDK.h>
+#import "MBProgressHUD+XMG.h"
 
 @interface forgetPassWardViewController ()
 {
@@ -126,12 +127,12 @@
 {
     if ([_phone.text isEqualToString:@""])
     {
-        //[SVProgressHUD showInfoWithStatus:@"亲,请输入手机号码"];
+        [MBProgressHUD showError:@"亲,请输入手机号码"];
         return;
     }
     else if (_phone.text.length <11)
     {
-        //[SVProgressHUD showInfoWithStatus:@"您输入的手机号码格式不正确"];
+        [MBProgressHUD showError:@"您输入的手机号码格式不正确"];
         return;
     }
     _oUserPhoneNum =_phone.text;
@@ -139,8 +140,24 @@
     self.timeCount = 60;
     __weak forgetPassWardViewController *weakSelf = self;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(reduceTime:) userInfo:sender repeats:YES];
-    
-   }
+    /**
+     *  @from                    v1.1.1
+     *  @brief                   获取验证码(Get verification code)
+     *
+     *  @param method            获取验证码的方法(The method of getting verificationCode)
+     *  @param phoneNumber       电话号码(The phone number)
+     *  @param zone              区域号，不要加"+"号(Area code)
+     *  @param customIdentifier  自定义短信模板标识 该标识需从官网http://www.mob.com上申请，审核通过后获得。(Custom model of SMS.  The identifier can get it  from http://www.mob.com  when the application had approved)
+     *  @param result            请求结果回调(Results of the request)
+     */
+    [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:_oUserPhoneNum zone:@"86" customIdentifier:nil result:^(NSError *error) {
+        if (!error) {
+            NSLog(@"获取验证码成功");
+        } else {
+            NSLog(@"错误信息：%@",error);
+        }
+    }];
+}
 
 - (void)reduceTime:(NSTimer *)codeTimer {
     self.timeCount--;
@@ -244,11 +261,27 @@
 //        //[SVProgressHUD showInfoWithStatus:@"亲,请输入密码"];
 //        return;
 //    }
-  
-        newPassWardViewController *new=[[newPassWardViewController alloc]init];
-        //赋值
-        new.userPhone=_phone.text;
-        [self.navigationController pushViewController:new animated:YES];
+    [SMSSDK commitVerificationCode:code.text phoneNumber:_oUserPhoneNum zone:@"86" result:^(SMSSDKUserInfo *userInfo, NSError *error) {
+        
+        {
+            if (!error)
+            {
+                
+                NSLog(@"验证成功");
+                newPassWardViewController *new=[[newPassWardViewController alloc]init];
+                //赋值
+                new.userPhone=_phone.text;
+                [self.navigationController pushViewController:new animated:YES];
+            }
+            else
+            {
+                NSLog(@"错误信息:%@",error);
+               [MBProgressHUD showError:@"验证码错误"];
+            }
+        }
+    }];
+    
+    
     
 }
 

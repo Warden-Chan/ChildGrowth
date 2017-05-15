@@ -14,6 +14,7 @@
 #import "CGBMI.h"
 @interface DeleteTableViewController ()
 @property (strong, nonatomic) UIButton *btn;
+@property (nonatomic, strong) NSMutableArray *deleteItems;
 @end
 
 @implementation DeleteTableViewController
@@ -23,13 +24,29 @@
 //    DVC.childmodel = childmodel;
 //    return DVC;
 //}
+-(NSMutableArray *)deleteItems{
+    if (_deleteItems == nil) {
+        NSMutableArray *deleteItems =  [[NSMutableArray alloc]init];
+        NSMutableArray *heightArr = [[NSMutableArray alloc]init];
+        NSMutableArray *weightArr = [[NSMutableArray alloc]init];
+        NSMutableArray *BMIArr = [[NSMutableArray alloc]init];
+        NSMutableArray *headcArr = [[NSMutableArray alloc]init];
+        [deleteItems addObject:heightArr];
+        [deleteItems addObject:weightArr];
+        [deleteItems addObject:headcArr];
+        [deleteItems addObject:BMIArr];
+        _deleteItems = deleteItems;
+        
+    }
+    return _deleteItems;
+}
 NSString * const indentifier = @"deletecell";
 - (void)viewDidLoad {
     [super viewDidLoad];
 //    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:indentifier];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
-
+    
     [self steup];
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
 //     self.navigationItem.rightBarButtonItem = self.editButtonItem;
@@ -65,7 +82,7 @@ return @"删除";
     //把 到上一个控制器(CGGrowthchartViewController)
     if(self.delegate != nil)
     {
-       [self.delegate deleteforVC:self childItem:self.childmodel];
+       [self.delegate deleteforVC:self childItem:self.childmodel deleteItem:self.deleteItems];
     }
     //返回上一级
     [self.navigationController popViewControllerAnimated:YES];
@@ -172,24 +189,33 @@ return @"删除";
         switch (indexPath.section) {
             case 0:{
               CGHeight *heightItem = self.childmodel.heightArr[indexPath.row];
+                //记录删除的条目，用于判断修改删除云端内容
+                NSDictionary *heightdic = @{@"height":heightItem.height,@"time":heightItem.time};
+                [self.deleteItems[0] addObject:heightdic];
                 [self.childmodel.heightArr removeObject:heightItem];
             }
                 break;
             case 1:
             {
                 CGWeight *weightItem = self.childmodel.weightArr[indexPath.row];
+                NSDictionary *weightdic = @{@"weight":weightItem.weight,@"time":weightItem.time};
+                [self.deleteItems[1] addObject:weightdic];
                 [self.childmodel.weightArr removeObject:weightItem];
             }
                 break;
             case 2:
             {
                 CGHeadc *headcItem = self.childmodel.headcArr[indexPath.row];
+                NSDictionary *headcdic = @{@"headc":headcItem.headc,@"time":headcItem.time};
+                [self.deleteItems[2] addObject:headcdic];
                 [self.childmodel.headcArr removeObject:headcItem];
             }
                 break;
             case 3:
             {
                 CGBMI *BMIItem = self.childmodel.BMIArr[indexPath.row];
+                NSDictionary *BMIdic = @{@"value":BMIItem.value,@"time":BMIItem.time};
+                [self.deleteItems[3] addObject:BMIdic];
                 [self.childmodel.BMIArr removeObject:BMIItem];
             }
                 break;

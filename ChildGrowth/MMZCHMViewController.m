@@ -9,7 +9,8 @@
 #import "MMZCHMViewController.h"
 #import "settingPassWardViewController.h"
 #import "MMZCViewController.h"
-
+#import <SMS_SDK/SMSSDK.h>
+#import "MBProgressHUD+XMG.h"
 
 
 @interface MMZCHMViewController ()
@@ -37,7 +38,7 @@
     
 //    self.view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
 //    
-   self.title=@"注册1/4";
+   self.title=@"注册1/5";
     self.navigationController.navigationBarHidden = NO;
     [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
    self.view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
@@ -142,7 +143,13 @@
     sender.userInteractionEnabled = NO;
     self.timeCount = 60;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(reduceTime:) userInfo:sender repeats:YES];
-    
+    [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:_oUserPhoneNum zone:@"86" customIdentifier:nil result:^(NSError *error) {
+        if (!error) {
+            NSLog(@"获取验证码成功");
+        } else {
+            NSLog(@"错误信息：%@",error);
+        }
+    }];
   }
 
 - (void)reduceTime:(NSTimer *)codeTimer {
@@ -252,8 +259,31 @@
 //        //[SVProgressHUD showInfoWithStatus:@"验证码错误"];
 //        return;
 //   }
-   
-    [self.navigationController pushViewController:[[settingPassWardViewController alloc]init] animated:YES];
+    
+    
+    settingPassWardViewController *VC= [[settingPassWardViewController alloc]init];
+    VC.userAccount = phone.text;
+    [self.navigationController pushViewController:VC animated:YES];
+    
+//    [SMSSDK commitVerificationCode:code.text phoneNumber:_oUserPhoneNum zone:@"86" result:^(SMSSDKUserInfo *userInfo, NSError *error) {
+//        
+//        {
+//            if (!error)
+//            {
+//                
+//                NSLog(@"验证成功");
+//                settingPassWardViewController *VC= [[settingPassWardViewController alloc]init];
+//                VC.userAccount = phone.text;
+//                [self.navigationController pushViewController:VC animated:YES];
+//            }
+//            else
+//            {
+//                NSLog(@"错误信息:%@",error);
+//                [MBProgressHUD showError:@"验证码错误"];
+//            }
+//        }
+//    }];
+    
         
     
     

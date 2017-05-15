@@ -100,7 +100,7 @@
 {
     takePhoto *TPhoto = [takePhoto sharedModel];
     
-    [picker dismissViewControllerAnimated:YES completion:^{}];
+    [picker dismissViewControllerAnimated:YES completion:NULL];
     
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
 

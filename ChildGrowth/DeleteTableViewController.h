@@ -12,7 +12,7 @@
 @protocol DeleteTableViewControllerDelegate <NSObject>
 
 //2.定义协议方法
-- (void)deleteforVC:(DeleteTableViewController *)deleteforVC childItem:(CGChildModel *)childItem;
+- (void)deleteforVC:(DeleteTableViewController *)deleteforVC childItem:(CGChildModel *)childItem deleteItem:(NSMutableArray *)deleteitem;
 @end
 @interface DeleteTableViewController : UITableViewController
 

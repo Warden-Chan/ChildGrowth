@@ -35,7 +35,7 @@
         /** 正文 */
         CGFloat textX = iconX ;
         CGFloat textY = CGRectGetMaxY(self.iconFrame);
-        CGFloat textW = [UIScreen mainScreen].bounds.size.width - 4 * space;
+        CGFloat textW = [UIScreen mainScreen].bounds.size.width - 3 * space;
         NSDictionary *textAtt = @{NSFontAttributeName : [UIFont systemFontOfSize:19]};
         // 最大宽度是textW,高度不限制
         CGSize textSize = CGSizeMake(textW, MAXFLOAT);

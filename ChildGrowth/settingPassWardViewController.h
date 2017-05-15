@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface settingPassWardViewController : UIViewController
-
+@property (nonatomic,strong)NSString *userAccount;
 @end

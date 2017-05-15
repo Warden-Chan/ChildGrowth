@@ -14,4 +14,6 @@
 /** 内容模型 */
 
 @property(nonatomic,strong)CGChildModel *childmodel;
+@property (nonatomic, strong) NSMutableArray *childs;
+@property (nonatomic,copy) NSNumber *childindex;
 @end

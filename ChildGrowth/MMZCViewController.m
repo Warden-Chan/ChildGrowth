@@ -11,7 +11,7 @@
 #import "AppDelegate.h"
 #import "MBProgressHUD+XMG.h"
 #import "MMZCHMViewController.h"
-
+#import "AFHTTPSessionManager.h"
 
 
 @interface MMZCViewController ()
@@ -43,6 +43,7 @@
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
     //self.view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     //设置NavigationBar背景颜色
     View=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -303,10 +304,300 @@
 
 //登录
 -(void)landClick
-{//如果用户名跟密码正确,跳转到下一个界面
+{
+ 
+    //如果用户名跟密码正确,跳转到下一个界面
     //提醒用户正在登录
     [MBProgressHUD showMessage:@"正在登录..." toView:self.view];
-    [self performSegueWithIdentifier:@"contactVC" sender:nil];
+    
+    // 1.创建AFN管理者
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // 2.利用AFN管理者发送请求
+    NSDictionary *params = @{
+                             @"userAccount" : user.text,
+                             @"userPassword" : pwd.text
+                             };
+    [manager POST:@"http://192.168.1.121/childGrow/Mobile/login" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dict = responseObject;
+        if ([[dict objectForKey:@"flag"]  isEqual:@1]) {
+            //1、记录token到userdeafult
+            NSString *token = [dict objectForKey:@"token"];
+            //将上述数据全部存储到NSUserDefaults中
+            NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+            //存储时，除NSNumber类型使用对应的类型意外，其他的都是使用setObject:forKey:
+            [userDefaults setValue:token forKey:@"token"];
+            [userDefaults setValue:user.text forKey:@"userAccount"];
+            [userDefaults setValue:pwd.text forKey:@"userPassword"];
+            //这里建议同步存储到磁盘中，但是不是必须的
+            [userDefaults synchronize];
+            //2、生成ChildInformation   1.info  2.data
+            NSDictionary *info = [dict objectForKey:@"info"];
+            NSMutableArray *childArr = [[NSMutableArray alloc]init];
+            if(![info isKindOfClass:[NSNull class]]){
+                for (NSDictionary *childinfo in [info allValues]) {
+                    NSNumber *childid = [childinfo objectForKey:@"childid"];
+                    NSString *childname =[childinfo objectForKey:@"childname"];
+                    NSString *birthdate =[childinfo objectForKey:@"childbirthdate"];
+                    NSString *childbirthdate = [self dataStringfromDataString:birthdate];
+                    NSString *childsex =[childinfo objectForKey:@"childsex"];
+                    NSMutableDictionary *childdic= [[NSMutableDictionary alloc]initWithDictionary:@{
+                                                                                                    @"ChildId":childid,
+                                                                                                    @"name":childname,
+                                                                                                    @"age":childbirthdate,
+                                                                                                    @"sex":childsex,
+                                                                                                    @"icon":@""
+                                                                                                    }];
+                    [childArr addObject:childdic];
+                }
+                NSDictionary *data = [dict objectForKey:@"data"];
+                if(![data isKindOfClass:[NSNull class]]){
+                    for (NSInteger i=0;i<childArr.count;i++) {    //一条info数据
+                        NSDictionary *childdic = childArr[i];
+                        NSNumber *childinfoid = [childdic objectForKey:@"ChildId"];
+                        NSMutableArray *heightArr = [[NSMutableArray alloc]init];
+                        NSMutableArray *weightArr = [[NSMutableArray alloc]init];
+                        NSMutableArray *headcArr = [[NSMutableArray alloc]init];
+                        NSMutableArray *BMIArr = [[NSMutableArray alloc]init];
+                        
+                        for (NSDictionary *childdata in [data allValues]) {   //一条data数据
+                            NSNumber *childid = [childdata objectForKey:@"childid"];
+                            if ([childinfoid isEqual:childid]) {
+                                NSString *importtime =[childdata objectForKey:@"importtime"];
+                                NSString *time = [self dataStringfromDataString:importtime];
+                                NSNumber *height = [childdata objectForKey:@"childheight"];
+                                NSNumber *weight = [childdata objectForKey:@"childweight"];
+                                NSNumber *headc = [childdata objectForKey:@"childheadc"];
+                                NSNumber *value = [childdata objectForKey:@"childbmi"];
+                                id heightid = height;
+                                id weightid = weight;
+                                id headcid = headc;
+                                id valueid = value;
+                                if (![heightid isKindOfClass:[NSNull class]]) {
+                                    if ([height floatValue] >0) {
+                                        
+                                        
+                                        NSDictionary *dicItem = @{ @"height":height,
+                                                                   @"time":time
+                                                                   };
+                                        [heightArr addObject:dicItem];
+                                    }
+                                }
+                                if (![weightid isKindOfClass:[NSNull class]]) {
+                                    if ([weight floatValue] >0) {
+                                        NSDictionary *dicItem = @{ @"weight":weight,
+                                                                   @"time":time
+                                                                   };
+                                        [weightArr addObject:dicItem];
+                                    }
+                                    
+                                }
+                                if (![headcid isKindOfClass:[NSNull class]]) {
+                                    if ([headc floatValue] >0) {
+                                        NSDictionary *dicItem = @{ @"headc":headc,
+                                                                   @"time":time
+                                                                   };
+                                        [headcArr addObject:dicItem];
+                                    }
+                                    
+                                }
+                                if (![valueid isKindOfClass:[NSNull class]]) {
+                                    if ([value floatValue] >0) {
+                                        NSDictionary *dicItem = @{ @"value":value,
+                                                                   @"time":time
+                                                                   };
+                                        [BMIArr addObject:dicItem];
+                                    }
+                                    
+                                }
+                            }
+                        }
+                        //添加
+                        //                            NSMutableDictionary *childDic = [[NSMutableDictionary alloc]initWithDictionary:childArr[i]];
+                        [childArr[i] setObject:heightArr forKey:@"heightArr"];
+                        [childArr[i] setObject:weightArr forKey:@"weightArr"];
+                        [childArr[i] setObject:headcArr forKey:@"headcArr"];
+                        [childArr[i] setObject:BMIArr forKey:@"BMIArr"];
+                    }
+                }
+                //  childArr写到ChildInformation.plist
+                NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+                NSString *fileName = [documentsDirectory stringByAppendingPathComponent:@"ChildInformation.plist"];
+                //                        NSMutableArray *childsArr = [[NSMutableArray alloc]init];
+                //                        for (int i=0;i<self.childs.count;i++) {
+                //                            CGChildModel *childmodel = self.childs[i];
+                //                            NSDictionary *childDict = childmodel.mj_keyValues;
+                //                            [childsArr addObject:childDict];
+                //                        }
+                //     NSLog(@"%@",childsDict);
+                
+                //写入
+                [childArr writeToFile:fileName atomically:YES];
+            }
+//            dispatch_sync(dispatch_get_main_queue(), ^{
+                //隐藏HUD
+                [MBProgressHUD hideHUDForView:self.view];
+                [self performSegueWithIdentifier:@"contactVC" sender:nil];
+//            });
+            
+        }else{
+            //提醒用户
+            //                            NSLog(@"用户名或密码");
+            //隐藏HUD
+
+                [MBProgressHUD hideHUDForView:self.view];
+                [MBProgressHUD showError:@"用户名或密码错误"];
+
+            
+        }
+        NSLog(@"请求成功---%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败---%@", error);
+    }];
+
+    
+//        NSURLSession *session = [NSURLSession sharedSession];
+//        NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/login"];
+//        NSURL *url = [NSURL URLWithString:urlstring];
+//        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
+//        NSString *parmStr = [NSString stringWithFormat:@"userAccount=%@&userPassword=%@",user.text,pwd.text];
+//        NSData *data1 = [parmStr dataUsingEncoding:NSUTF8StringEncoding];
+//        [request setHTTPBody:data1];
+//        [request setHTTPMethod:@"POST"];
+//        //    [NSURLConnection connectionWithRequest:request delegate:self];
+//        NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//            //解析数据
+//            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+//            if ([[dict objectForKey:@"flag"]  isEqual:@1]) {
+//                //1、记录token到userdeafult
+//                NSString *token = [dict objectForKey:@"token"];
+//                //将上述数据全部存储到NSUserDefaults中
+//                NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+//                //存储时，除NSNumber类型使用对应的类型意外，其他的都是使用setObject:forKey:
+//                [userDefaults setValue:token forKey:@"token"];
+//                //这里建议同步存储到磁盘中，但是不是必须的
+//                [userDefaults synchronize];
+//                //2、生成ChildInformation   1.info  2.data
+//                NSDictionary *info = [dict objectForKey:@"info"];
+//                NSMutableArray *childArr = [[NSMutableArray alloc]init];
+//                if(!(info==nil)){
+//                for (NSDictionary *childinfo in [info allValues]) {
+//            NSNumber *childid = [childinfo objectForKey:@"childid"];
+//            NSString *childname =[childinfo objectForKey:@"childname"];
+//            NSString *birthdate =[childinfo objectForKey:@"childbirthdate"];
+//            NSString *childbirthdate = [self dataStringfromDataString:birthdate];
+//            NSString *childsex =[childinfo objectForKey:@"childsex"];
+//            NSMutableDictionary *childdic= [[NSMutableDictionary alloc]initWithDictionary:@{
+//                                                                                                   @"ChildId":childid,
+//                                                                                                   @"name":childname,
+//                                                                                                   @"age":childbirthdate,
+//                                                                                                   @"sex":childsex,
+//                                                                                                   @"icon":@""
+//                                                                                                   }];
+//                    [childArr addObject:childdic];
+//                }
+//                NSDictionary *data = [dict objectForKey:@"data"];
+//                    if(!(data==nil)){
+//                        for (NSInteger i=0;i<childArr.count;i++) {    //一条info数据
+//                            NSDictionary *childdic = childArr[i];
+//                            NSNumber *childinfoid = [childdic objectForKey:@"ChildId"];
+//                            NSMutableArray *heightArr = [[NSMutableArray alloc]init];
+//                            NSMutableArray *weightArr = [[NSMutableArray alloc]init];
+//                            NSMutableArray *headcArr = [[NSMutableArray alloc]init];
+//                            NSMutableArray *BMIArr = [[NSMutableArray alloc]init];
+//                            
+//                        for (NSDictionary *childdata in [data allValues]) {   //一条data数据
+//                         NSNumber *childid = [childdata objectForKey:@"childid"];
+//                            if ([childinfoid isEqual:childid]) {
+//                            NSString *time =[childdata objectForKey:@"importtime"];
+//                            NSNumber *height = [childdata objectForKey:@"childheight"];
+//                            NSNumber *weight = [childdata objectForKey:@"childweight"];
+//                            NSNumber *headc = [childdata objectForKey:@"childheadc"];
+//                            NSNumber *value = [childdata objectForKey:@"childbmi"];
+//                                id heightid = height;
+//                                id weightid = weight;
+//                                id headcid = headc;
+//                                id valueid = value;
+//                                if (![heightid isKindOfClass:[NSNull class]]) {
+//                                    if ([height floatValue] >0) {
+//                                        
+//                                    
+//                                    NSDictionary *dicItem = @{ @"height":height,
+//                                                               @"time":time
+//                                                              };
+//                                    [heightArr addObject:dicItem];
+//                                        }
+//                                }
+//                                if (![weightid isKindOfClass:[NSNull class]]) {
+//                                    if ([weight floatValue] >0) {
+//                                        NSDictionary *dicItem = @{ @"weight":weight,
+//                                                                   @"time":time
+//                                                                   };
+//                                        [weightArr addObject:dicItem];
+//                                    }
+//                                    
+//                                }
+//                                if (![headcid isKindOfClass:[NSNull class]]) {
+//                                    if ([headc floatValue] >0) {
+//                                        NSDictionary *dicItem = @{ @"headc":headc,
+//                                                                   @"time":time
+//                                                                   };
+//                                        [headcArr addObject:dicItem];
+//                                    }
+//                                   
+//                                }
+//                                if (![valueid isKindOfClass:[NSNull class]]) {
+//                                    if ([value floatValue] >0) {
+//                                        NSDictionary *dicItem = @{ @"value":value,
+//                                                                   @"time":time
+//                                                                   };
+//                                        [BMIArr addObject:dicItem];
+//                                    }
+//                                    
+//                                }
+//                            }
+//                         }
+//                           //添加
+////                            NSMutableDictionary *childDic = [[NSMutableDictionary alloc]initWithDictionary:childArr[i]];
+//                            [childArr[i] setObject:heightArr forKey:@"heightArr"];
+//                            [childArr[i] setObject:weightArr forKey:@"weightArr"];
+//                            [childArr[i] setObject:headcArr forKey:@"headcArr"];
+//                            [childArr[i] setObject:BMIArr forKey:@"BMIArr"];
+//                        }
+//                    }
+//                    //  childArr写到ChildInformation.plist
+//                        NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+//                        NSString *fileName = [documentsDirectory stringByAppendingPathComponent:@"ChildInformation.plist"];
+////                        NSMutableArray *childsArr = [[NSMutableArray alloc]init];
+////                        for (int i=0;i<self.childs.count;i++) {
+////                            CGChildModel *childmodel = self.childs[i];
+////                            NSDictionary *childDict = childmodel.mj_keyValues;
+////                            [childsArr addObject:childDict];
+////                        }
+//                        //     NSLog(@"%@",childsDict);
+//                        [childArr writeToFile:fileName atomically:YES];
+//                }
+//                dispatch_sync(dispatch_get_main_queue(), ^{
+//                    //隐藏HUD
+//                    [MBProgressHUD hideHUDForView:self.view];
+//                    [self performSegueWithIdentifier:@"contactVC" sender:nil];
+//                });
+//                
+//            }else{
+//                //提醒用户
+////                            NSLog(@"用户名或密码");
+//                //隐藏HUD
+//                dispatch_sync(dispatch_get_main_queue(), ^{
+//                    [MBProgressHUD hideHUDForView:self.view];
+//                    [MBProgressHUD showError:@"用户名或密码错误"];
+//                });
+//                
+//                }
+//            NSLog(@"*****************%@",dict);
+//            
+//        }];
+//        [dataTask resume];
+    
     //延时执行任务GCD
 //    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 //        
@@ -324,7 +615,7 @@
 //            [MBProgressHUD hideHUDForView:self.view];
 //            [MBProgressHUD showError:@"用户名或密码"];
 //        }
-    
+//    
 //    });
     
     
@@ -369,7 +660,17 @@
 {
    [self.navigationController pushViewController:[[forgetPassWardViewController alloc]init] animated:YES];
 }
-
+//将yyyy-MM-dd格式的日期转成yyyy年M月d日
+-(NSString *)dataStringfromDataString:(NSString *)datastring{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *data =[formatter dateFromString:datastring];
+    NSDateFormatter *Dataformatter =[[NSDateFormatter alloc]init];
+    [Dataformatter setDateFormat:@"yyyy年M月d日"];
+    NSString *DateString = [Dataformatter stringFromDate:data];
+    //    NSLog(@"``````````%@```````DateString:%@",data,DateString);
+    return DateString;
+}
 #pragma mark - 工具
 //手机号格式化
 -(NSString*)getHiddenStringWithPhoneNumber:(NSString*)number middle:(NSInteger)countHiiden{
@@ -407,7 +708,6 @@
     
     return chuLi;
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

@@ -23,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title=@"注册3/4";
+    self.title=@"注册3/5";
     self.view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(clickaddBtn)];
     [addBtn setImage:[UIImage imageNamed:@"goback_back_orange_on"]];
@@ -63,7 +63,13 @@
 }
 -(void)landClick
 {
-    [self.navigationController pushViewController:[[settingChildViewController alloc]init] animated:YES];
+    settingChildViewController *VC=[[settingChildViewController alloc]init];
+    VC.flag = NO;
+    VC.userAccount =self.userAccount;
+    VC.userPassword = self.userPassword;
+    VC.userIcon = self.head.imageView.image;
+    VC.userName = username.text;
+    [self.navigationController pushViewController:VC animated:YES];
     
 }
 

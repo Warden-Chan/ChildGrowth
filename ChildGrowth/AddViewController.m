@@ -32,7 +32,7 @@
     self.textDate.delegate = self;
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    formatter.dateFormat = @"yyyy年MM月dd日";
+    formatter.dateFormat = @"yyyy年M月d日";
     NSString *dataString = [formatter stringFromDate:date];
     self.textDate.text = dataString;
     

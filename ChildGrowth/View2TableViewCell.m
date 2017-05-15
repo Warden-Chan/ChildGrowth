@@ -29,7 +29,7 @@
 //        NSLog(@"&&&&&&&&&&&&&&&&&&&&&&&&&");
         
         CGFloat spcae = 10;
-        CGFloat W = self.frame.size.width-spcae*2;
+        CGFloat W = screenWidth-spcae*2;
         /** 图标1 */
         self.view1 = [[[NSBundle mainBundle] loadNibNamed:@"View2" owner:nil options:nil] lastObject];
 //         self.view1 = [[View2UIButton alloc] init];

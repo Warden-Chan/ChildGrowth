@@ -12,6 +12,7 @@
 #import "CGHeight.h"
 #import "CGWeight.h"
 #import "CGBMI.h"
+#import "MJExtension.h"
 //define this constant if you want to use Masonry without the 'mas_' prefix
 #define MAS_SHORTHAND
 
@@ -37,6 +38,8 @@
 @property (nonatomic, weak) UILabel *BMILabel;
 /** 测量日期 */
 @property (nonatomic, weak) UILabel *timeLabel;
+
+@property (nonatomic, strong) NSArray *childicons;
 @end
 
 @implementation FirstCell
@@ -165,19 +168,41 @@
 }
 -(void)headerimage{
     [takePhoto sharePicture:^(UIImage *HeadImage){
-        
+//        UIImage *img = [UIImage imageNamed:@"小孩2"];
 //        NSLog(@"%@",HeadImage);
-        [self.iconButtonView setImage:HeadImage forState:UIControlStateNormal];
+        NSDate *date = [NSDate date];
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        formatter.dateFormat = @"yyyyMMddHHmmSS";
+        NSString *imgNameString = [formatter stringFromDate:date];
+        NSString *path_sanbox = NSHomeDirectory();
+        NSString *sss = [NSString stringWithFormat:@"/Documents/%@.png",imgNameString];
+        NSString *imagePath = [path_sanbox stringByAppendingString:sss];
+        NSData *imgaData = UIImagePNGRepresentation(HeadImage);
+        [imgaData writeToFile:imagePath atomically:YES];
         
+        NSMutableArray *childarr = self.childs;
+        CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
+        childmodel.icon = imgNameString;
+        childarr[[self.childindex integerValue]] = childmodel;
+        self.childs = childarr;
+        [self writeAllChildInfortoPlist];
+        
+        [self.iconButtonView setImage:HeadImage forState:UIControlStateNormal];
+//        self.childmodel.icon = imgNameString;
     }];
+    
 }
 /**
  *  设置子控件的数据
  */
-
 -(void)setChildmodel:(CGChildModel *)childmodel{
     _childmodel =childmodel;
-    [self.iconButtonView setImage:[UIImage imageNamed:childmodel.icon] forState:UIControlStateNormal];
+    NSString *imgname = [NSString stringWithFormat:@"%@.png",childmodel.icon ];
+    NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]stringByAppendingPathComponent:imgname];
+    UIImage *savedImage = [[UIImage alloc]initWithContentsOfFile:fullPath];
+    if (![imgname isEqualToString:@""]) {
+        [self.iconButtonView setImage:savedImage forState:UIControlStateNormal];
+    }
     CGHeight *heightItem= childmodel.heightArr.lastObject;
     CGWeight *weightItem= childmodel.weightArr.lastObject;
     CGBMI *BMIItem= childmodel.BMIArr.lastObject;
@@ -198,5 +223,20 @@
 //    CGFloat bmi = [weightItem.weight floatValue]/heip;
 //    self.BMILabel.text = [NSString stringWithFormat:@"BMI:\n%.1f",bmi];
 
+}
+-(void)writeAllChildInfortoPlist{
+    //    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"ChildInformation" ofType:@"plist"];
+    NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
+    NSString *fileName = [documentsDirectory stringByAppendingPathComponent:@"ChildInformation.plist"];
+    
+    NSMutableArray *childsArr = [[NSMutableArray alloc]init];
+    for (int i=0;i<self.childs.count;i++) {
+        CGChildModel *childmodel = self.childs[i];
+        NSDictionary *childDict = childmodel.mj_keyValues;
+        [childsArr addObject:childDict];
+    }
+    //     NSLog(@"%@",childsDict);
+    [childsArr writeToFile:fileName atomically:YES];
+    
 }
 @end

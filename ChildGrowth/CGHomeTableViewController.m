@@ -26,6 +26,8 @@
 @property (nonatomic, strong) CGChildModel *childmodel;
 /** 当前儿童index */
 @property (nonatomic,copy) NSNumber *childindex;
+@property (nonatomic,copy) NSString *userAccount;
+@property (nonatomic,copy) NSString *token;
 @property (nonatomic, strong) SYNavigationDropdownMenu *menu;
 @end
 
@@ -75,6 +77,12 @@ NSString *ID4 = @"fourth";
 }
 
 -(void)viewWillAppear:(BOOL)animated{
+    [self readNSUserDefaults];
+//    if (!self.token) {
+//        //手动去执行线(segue)
+//        
+//        [self.tabBarController performSegueWithIdentifier:@"nologin" sender:nil];
+//    }
     _childs = [CGChildModel mj_objectArrayWithFilename:@"ChildInformation.plist"];
     NSString *documentsDirectory = [NSHomeDirectory() stringByAppendingPathComponent:@"Documents"];
     NSString *fileName = [documentsDirectory stringByAppendingPathComponent:@"ChildInformation.plist"];
@@ -84,7 +92,6 @@ NSString *ID4 = @"fourth";
     }else {
         _childs = [CGChildModel mj_objectArrayWithFilename:@"ChildInformation.plist"];
     }
-    [self readNSUserDefaults];
     NSString *tittle = [self titleArray][[self.childindex integerValue]];
    [self.menu setTitle:tittle forState:UIControlStateNormal];
 //    [self navigationDropdownMenu:self.menu didSelectTitleAtIndex:[self.childindex intValue]];
@@ -157,8 +164,10 @@ NSString *ID4 = @"fourth";
     
     // 设置数据(传递模型)
 //    cell.fs = self.fs[0];
-    cell.childmodel = self.childs[[self.childindex integerValue]];
-    
+        cell.childs = self.childs;
+        cell.childindex = self.childindex;
+        cell.childmodel = self.childs[[self.childindex integerValue]];
+        
     return cell;
     }else if(indexPath.section == 2){
         // 访问缓存池
@@ -266,7 +275,7 @@ NSString *ID4 = @"fourth";
     if(indexPath.section == 0){
         return 150;
     }else if(indexPath.section == 2){
-    NSLog(@"heightForRowAtIndexPath--%zd",indexPath.row);
+//    NSLog(@"heightForRowAtIndexPath--%zd",indexPath.row);
         CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
         self.childmodel = childmodel;
        NSString *mouth = [self getConcreteAge:childmodel.age ismouth:YES];
@@ -375,7 +384,11 @@ NSString *ID4 = @"fourth";
     
     //读取NSDate日期类型的数据
     NSNumber *childindex = [userDefaultes valueForKey:@"childindex"];
+    NSString *token = [userDefaultes valueForKey:@"token"];
+    NSString *userAccount = [userDefaultes valueForKey:@"userAccount"];
     self.childindex = childindex;
+    self.token = token;
+    self.userAccount = userAccount;
    }
 /*
 // Override to support conditional editing of the table view.

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="wdw-fD-iZt">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -14,7 +14,7 @@
         <!--Navigation Controller-->
         <scene sceneID="jbN-xC-5qu">
             <objects>
-                <navigationController id="wdw-fD-iZt" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="LoginController" id="wdw-fD-iZt" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="r3c-Ao-4vA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -25,7 +25,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hSK-No-1Bc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-156" y="-860"/>
+            <point key="canvasLocation" x="-45" y="-862"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="ybZ-pW-zbw">
@@ -47,7 +47,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xj7-HZ-gbz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="585" y="-860"/>
+            <point key="canvasLocation" x="789" y="-861"/>
         </scene>
         <!--Login View Controller1-->
         <scene sceneID="Uqf-XS-bAC">
@@ -212,7 +212,7 @@
                         <segue destination="OYv-ga-3ZA" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
                         <segue destination="uzP-7w-veH" kind="relationship" relationship="viewControllers" id="I5W-pJ-zot"/>
                         <segue destination="p4v-Dy-oJG" kind="relationship" relationship="viewControllers" id="ke3-do-jZD"/>
-                        <segue destination="wdw-fD-iZt" kind="show" id="PAF-Gd-XRC"/>
+                        <segue destination="wdw-fD-iZt" kind="show" identifier="nologin" id="PAF-Gd-XRC"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>

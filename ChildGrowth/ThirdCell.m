@@ -40,7 +40,7 @@
         }];
         
         /**身高进度条**/
-    YSProgressView *ysView1 = [[YSProgressView alloc] initWithFrame:CGRectMake(spcae*5, spcae*8, self.bounds.size.width - spcae*7, 10)];
+    YSProgressView *ysView1 = [[YSProgressView alloc] initWithFrame:CGRectMake(spcae*5, spcae*8,screenWidth - spcae*7, 10)];
 //        YSProgressView *ysView1 =[[YSProgressView alloc]init];
         ysView1.progressHeight = 10;
 //        ysView1.progressTintColor = [UIColor cyanColor];
@@ -79,7 +79,7 @@
         }];
         
         /**体重进度条**/
-            YSProgressView *ysView2 = [[YSProgressView alloc] initWithFrame:CGRectMake(spcae*5, spcae*23, self.bounds.size.width - spcae*7, 10)];
+            YSProgressView *ysView2 = [[YSProgressView alloc] initWithFrame:CGRectMake(spcae*5, spcae*23, screenWidth - spcae*7, 10)];
 //        YSProgressView *ysView2 =[[YSProgressView alloc]init];
         //    ysView.progressHeight = 10;
 //        ysView2.progressTintColor = [UIColor cyanColor];

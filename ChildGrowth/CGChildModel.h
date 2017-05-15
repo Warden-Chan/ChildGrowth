@@ -11,7 +11,7 @@
 
 @interface CGChildModel : NSObject
 /**  ID */
-@property(nonatomic) NSInteger ChildId;
+@property(nonatomic) NSString *ChildId;
 /** 图标 */
 @property (nonatomic, copy) NSString *icon;
 /** 姓名 */

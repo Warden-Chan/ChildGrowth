@@ -24,7 +24,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
-    self.title=@"注册2/4";
+    self.title=@"注册2/5";
     self.view.backgroundColor=[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     UIBarButtonItem *addBtn = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:@selector(clickaddBtn)];
     [addBtn setImage:[UIImage imageNamed:@"goback_back_orange_on"]];
@@ -83,7 +83,10 @@
 //        //[SVProgressHUD showInfoWithStatus:@"亲,密码长度至少六位"];
 //        return;
 //    }
-    [self.navigationController pushViewController:[[settinhHeaderViewController alloc]init] animated:YES];
+    settinhHeaderViewController *VC=  [[settinhHeaderViewController alloc]init];
+    VC.userAccount = self.userAccount;
+    VC.userPassword = passward.text;
+    [self.navigationController pushViewController:VC animated:YES];
     //[CheckTools savePassword:passward.text];
 }
 

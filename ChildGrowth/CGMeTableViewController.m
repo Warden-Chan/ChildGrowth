@@ -11,6 +11,9 @@
 #import "MeDetailTableViewController.h"
 #import "settingChildViewController.h"
 #import "ChildManageTableViewController.h"
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKUI/ShareSDK+SSUI.h>
+#import "feedBackViewController.h"
 @interface CGMeTableViewController ()<UITableViewDelegate,View2TableViewCellDelegate>
 /** 标签数据 */
 @property (nonatomic, strong) NSArray *Groups;
@@ -37,22 +40,22 @@ NSString *ID = @"view2cell";
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
     
     //post测试
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/thinkphp/index.php/mobile/login"];
-    NSURL *url = [NSURL URLWithString:urlstring];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
-    NSString *parmStr = [NSString stringWithFormat:@"mobileID=188688&password=123456"];
-    NSData *data1 = [parmStr dataUsingEncoding:NSUTF8StringEncoding];
-    [request setHTTPBody:data1];
-    [request setHTTPMethod:@"POST"];
-    //    [NSURLConnection connectionWithRequest:request delegate:self];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        //解析数据
-        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        NSLog(@"*****************%@",dict);
-        
-    }];
-    [dataTask resume];
+//    NSURLSession *session = [NSURLSession sharedSession];
+//    NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/login"];
+//    NSURL *url = [NSURL URLWithString:urlstring];
+//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
+//    NSString *parmStr = [NSString stringWithFormat:@"mobileID=188688&password=123456"];
+//    NSData *data1 = [parmStr dataUsingEncoding:NSUTF8StringEncoding];
+//    [request setHTTPBody:data1];
+//    [request setHTTPMethod:@"POST"];
+//    //    [NSURLConnection connectionWithRequest:request delegate:self];
+//    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//        //解析数据
+//        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+//        NSLog(@"*****************%@",dict);
+//        
+//    }];
+//    [dataTask resume];
 }
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
     NSLog(@"%s",__func__);
@@ -142,13 +145,110 @@ NSString *ID = @"view2cell";
 //    [self performSegueWithIdentifier:@"MeDetailTableViewController" sender:self];
 //    MeDetailTableViewController *meVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AccountManagerController"];
 //    UIStoryboard *meStoryBoard =[UIStoryboard storyboardWithName:@"CGMe" bundle:nil];
-    if(indexPath.section ==0 ){
-//    MeDetailTableViewController *meVC = [self.storyboard instantiateViewControllerWithIdentifier:@"AccountManagerController"];
-//    [self.navigationController pushViewController:[[MeDetailTableViewController alloc]init] animated:YES];
-        //跳转到下一个界面
-        //手动去执行线(segue)
-        [self performSegueWithIdentifier:@"detailVC" sender:nil];
+    switch (indexPath.section) {
+        case 0:
+        {
+            //跳转到下一个界面
+            //手动去执行线(segue)
+            [self performSegueWithIdentifier:@"detailVC" sender:nil];
+        }
+            break;
+        case 2:
+        {
+            switch (indexPath.row) {
+                case 0:
+                    //我的积分
+                    break;
+                case 1:
+                    //好大夫在线
+                    [self showWebSite];
+                    break;
+                case 2:
+                    //收藏
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
+        case 3:
+            
+            break;
+        case 4:
+        {
+            switch (indexPath.row) {
+                case 0:
+                {
+                    //问题帮助与反馈
+                    feedBackViewController *VC= [[feedBackViewController alloc]init];
+                    [self.navigationController pushViewController:VC animated:YES];
+                    break;
+                }
+                case 1:
+                    //推荐朋友安装
+                    [self sharesheet];
+                    break;
+                default:
+                    break;
+            }
+        }
+        default:
+            break;
     }
+    
+
+}
+-(void)showWebSite{
+    NSURL *url = [NSURL URLWithString:@"http://www.haodf.com"];
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+}
+-(void)sharesheet{
+    //1、创建分享参数
+//    NSArray* imageArray = @[[UIImage imageNamed:@"shareImg.png"]];
+    NSArray* imageArray = @[@"http://mob.com/Assets/images/logo.png?v=20150320"];
+//    （注意：图片必须要在Xcode左边目录里面，名称必须要传正确，如果要分享网络图片，可以这样传iamge参数 images:@[@"http://mob.com/Assets/images/logo.png?v=20150320"]）
+    if (imageArray) {
+        
+        NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
+        [shareParams SSDKSetupShareParamsByText:@"分享内容"
+                                         images:imageArray
+                                            url:[NSURL URLWithString:@"http://mob.com"]
+                                          title:@"分享标题"
+                                           type:SSDKContentTypeAuto];
+        //有的平台要客户端分享需要加此方法，例如微博
+        [shareParams SSDKEnableUseClientShare];
+        //2、分享（可以弹出我们的分享菜单和编辑界面）
+        [ShareSDK showShareActionSheet:nil //要显示菜单的视图, iPad版中此参数作为弹出菜单的参照视图，只有传这个才可以弹出我们的分享菜单，可以传分享的按钮对象或者自己创建小的view 对象，iPhone可以传nil不会影响
+                                 items:nil
+                           shareParams:shareParams
+                   onShareStateChanged:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error, BOOL end) {
+                       
+                       switch (state) {
+                           case SSDKResponseStateSuccess:
+                           {
+                               UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
+                                                                                   message:nil
+                                                                                  delegate:nil
+                                                                         cancelButtonTitle:@"确定"
+                                                                         otherButtonTitles:nil];
+                               [alertView show];
+                               break;
+                           }
+                           case SSDKResponseStateFail:
+                           {
+                               UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
+                                                                               message:[NSString stringWithFormat:@"%@",error]
+                                                                              delegate:nil
+                                                                     cancelButtonTitle:@"OK"
+                                                                     otherButtonTitles:nil, nil];
+                               [alert show];
+                               break;
+                           }
+                           default:
+                               break;
+                       }
+                   }
+         ];}
 }
 //返回每一组尾部控件
 //-(UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
@@ -178,9 +278,26 @@ NSString *ID = @"view2cell";
     }else if (button.tag ==22){
     [self performSegueWithIdentifier:@"qiandaoVC" sender:nil];
 //    [self.navigationController pushViewController:[[SignINController alloc]init] animated:YES];
-    }
+    }else{
+        //NSUserDefaults中
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        //存储时，除NSNumber类型使用对应的类型意外，其他的都是使用setObject:forKey:
+        [userDefaults removeObjectForKey:@"token"];
+        //这里建议同步存储到磁盘中，但是不是必须的
+        [userDefaults synchronize];
+        UIWindow *window = [[[UIApplication sharedApplication]delegate]window];
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:[NSBundle mainBundle]];
+            id view = [storyboard instantiateViewControllerWithIdentifier:@"LoginController"];
+            window.rootViewController = view;
+//        [self.tabBarController setSelectedIndex:0];
+        CATransition *myTransition = [CATransition animation];
+        myTransition.duration = 0.35; //持续时长0.35秒
+        myTransition.timingFunction = UIViewAnimationCurveEaseInOut;//计时函数，从头到尾的流畅度
+        myTransition.type = kCATransitionFade;
+        [window.layer addAnimation:myTransition forKey:nil];
     NSLog(@"代理实现tag:%ld",button.tag);
     
+}
 }
 /*
 // Override to support conditional editing of the table view.

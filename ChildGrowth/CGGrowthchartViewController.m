@@ -21,6 +21,7 @@
 #import "ChildGrowth-Bridging-Header.h"
 #import "ChildGrowth-Swift.h"
 #import "percentImageView.h"
+#import "AFHTTPSessionManager.h"
 
 
 
@@ -30,6 +31,8 @@
 @property (nonatomic, strong) SYNavigationDropdownMenu *menu;
 /** 当前儿童index */
 @property (nonatomic,copy) NSNumber *childindex;
+@property (nonatomic,copy) NSString *userAccount;
+@property (nonatomic,copy) NSString *token;
 
 @property (weak, nonatomic) IBOutlet UIButton *InputBtn;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -169,7 +172,7 @@
     [self tittlesetup];
     //返回显示中文
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc]init];
-    backItem.title = @"返回";
+    backItem.title = @"取消";
     self.navigationItem.backBarButtonItem = backItem;
     
 //    self.InputBtn.titleLabel.font = [UIFont systemFontOfSize:17];
@@ -1886,15 +1889,17 @@
             float min_p = 0;
             float max_p = 0;
             float min = 0;
-            float max = 0;
+            float max = 1;
             
             if(!self.StandardType.selectedSegmentIndex){
-                NSNumber *v1 = valArr1[mouth];
-                NSNumber *v2 = valArr2[mouth];
-                NSNumber *v3 = valArr3[mouth];
-                NSNumber *v4 = valArr4[mouth];
-                NSNumber *v5 = valArr5[mouth];
-            if (mouth <= count) {
+                if (mouth <=121) {
+                    NSNumber *v1 = valArr1[mouth];
+                    NSNumber *v2 = valArr2[mouth];
+                    NSNumber *v3 = valArr3[mouth];
+                    NSNumber *v4 = valArr4[mouth];
+                    NSNumber *v5 = valArr5[mouth];
+                    
+            
                 if([lastweight.weight compare:v1] >= 0 && [lastweight.weight compare:v2] ==-1){
                     min_p = 3;
                     max_p = 15;
@@ -1992,12 +1997,13 @@
         }
         case 2:{
             CGHeadc *lastheadc= childmodel.headcArr.lastObject;
-            NSString *lastheadcStr = [NSString stringWithFormat:@"%@", lastheadc.headc];
+            NSString *lastheadcStr = [NSString stringWithFormat:@"%.1f",[lastheadc.headc floatValue]];
             int mouth = [[self getCompareAge:childmodel.age latestDay:lastheadc.time] intValue];
             float min_p = 0;
             float max_p = 0;
             float min = 0;
-            float max = 0;
+            float max = 1;
+            if (mouth <=61){
             NSNumber *v1 = valArr1[mouth];
             NSNumber *v2 = valArr2[mouth];
             NSNumber *v3 = valArr3[mouth];
@@ -2037,13 +2043,14 @@
                     max = [v1 floatValue];
                 }
             }
+            }
             child_p = ([lastheadc.headc floatValue] - min)*(max_p - min_p)/(max - min) +min_p;
             if (child_p < 0) {
                 child_p = 0;
             }else if (child_p > 100){
                 child_p = 100;
             }
-            self.label.text = [NSString stringWithFormat:@"当前身高%@cm \n 超过%.1f%%的同龄儿童",lastheadcStr,child_p];
+            self.label.text = [NSString stringWithFormat:@"当前头围%@cm \n 超过%.1f%%的同龄儿童",lastheadcStr,child_p];
 //            self.label1.text =[NSString stringWithFormat:@"%@的身高较高，属于中上等，发育较早，请保持持续观察",childmodel.name];
             break;
         }
@@ -2260,7 +2267,7 @@
 - (IBAction)StandardTypeChange:(id)sender {
     [self.ChartType setEnabled:YES forSegmentAtIndex:2];
     [self.ChartType setEnabled:YES forSegmentAtIndex:3];
-    if (self.StandardType.selectedSegmentIndex) {
+    if (self.StandardType.selectedSegmentIndex) {    //中国
         [self.ChartType setEnabled:NO forSegmentAtIndex:2];
         if (!self.ZorPercent.selectedSegmentIndex) {
             [self.ChartType setEnabled:NO forSegmentAtIndex:3];
@@ -2383,22 +2390,295 @@
         }
     }
 }
+// type--- 0:height  1:weight  2:headc  3:BMI
+-(void)postEditData:(NSNumber *)data importtime:(NSString *)importtime type:(int)type childId:(NSString *)childId{
+//    NSString *token = [self readNSUserDefaultstoken];
+    NSString *parm;
+    switch (type) {
+        case 0:
+            parm =@"height";
+            break;
+        case 1:
+            parm =@"weight";
+            break;
+        case 2:
+            parm =@"headc";
+            break;
+        case 3:
+            parm =@"bmi";
+            break;
+        default:
+            break;
+    }
+   
+    NSString *newImporttime = [self dataStringfromDataString:importtime];
+//    NSNumber *childID = [NSNumber numberWithInteger:childId];
+//    NSString *userAccount = @"123456";
+//    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    // 1.创建AFN管理者
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // 2.利用AFN管理者发送请求
+    NSDictionary *params = @{
+                             @"parm" : parm,
+                             @"data" : data,
+                             @"childID" : childId,
+                             @"importTime" : newImporttime,
+                             @"token" : self.token
+                             };
+    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        dispatch_semaphore_signal(semaphore);
+        NSLog(@"请求成功---%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败---%@", error);
+    }];
+//    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    //post
+//    NSURLSession *session = [NSURLSession sharedSession];
+//    NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/dataEdit"];
+//    NSURL *url = [NSURL URLWithString:urlstring];
+//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
+//    NSString *parmStr = [NSString stringWithFormat:@"parm=%@&data=%@&childID=%@&importTime=%@&token=%@",parm,data,childId,importtime,token];
+//    NSData *data1 = [parmStr dataUsingEncoding:NSUTF8StringEncoding];
+//    [request setHTTPBody:data1];
+//    [request setHTTPMethod:@"POST"];
+//    //    [NSURLConnection connectionWithRequest:request delegate:self];
+//    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//        if (data != nil) {
+//            //解析数据
+//            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+//            NSLog(@"*****************%@",dict);
+//        }
+//        
+//    }];
+//    [dataTask resume];
+}
+// type--- 0:height  1:weight  2:headc  3:BMI
+-(void)postdata:(NSNumber *)data importtime:(NSString *)importtime type:(int)type childId:(NSString *)childId BirthDate:(NSString *)birthdate{
+//    NSString *token = [self readNSUserDefaultstoken];
+    NSString *parm;
+    switch (type) {
+        case 0:
+            parm =@"height";
+            break;
+        case 1:
+            parm =@"weight";
+            break;
+        case 2:
+            parm =@"headc";
+            break;
+        case 3:
+            parm =@"bmi";
+            break;
+        default:
+            break;
+    }
+    NSString *newImporttime = [self dataStringfromDataString:importtime];
+    NSString *newBirthdate = [self dataStringfromDataString:birthdate];
+    // 1.创建AFN管理者
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // 2.利用AFN管理者发送请求
+    NSDictionary *params = @{
+                             @"parm" : parm,
+                             @"data" : data,
+                             @"userAccount" : self.userAccount,
+                             @"childID" : childId,
+                             @"importTime" : newImporttime,
+                             @"token" : self.token,
+                             @"childBirthdate":newBirthdate
+                             };
+    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataAdd" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"请求成功---%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败---%@", error);
+    }];
+    //post
+//    NSURLSession *session = [NSURLSession sharedSession];
+//    NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/dataAdd"];
+//    NSURL *url = [NSURL URLWithString:urlstring];
+//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
+//    NSString *parmStr = [NSString stringWithFormat:@"parm=%@&data=%@&userAccount=%@&childID=%@&importTime=%@&token=%@",parm,data,self.userAccount,childId,importtime,self.token];
+//    NSData *data1 = [parmStr dataUsingEncoding:NSUTF8StringEncoding];
+//    [request setHTTPBody:data1];
+//    [request setHTTPMethod:@"POST"];
+//    //    [NSURLConnection connectionWithRequest:request delegate:self];
+//    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//        if (data != nil) {
+//            //解析数据
+//            NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+//            NSLog(@"*****************%@",dict);
+//        }
+//        
+//    }];
+//    [dataTask resume];
+}
+-(void)postDelete:(NSString *)importtime childId:(NSString *)childId{
+    NSString *newImporttime = [self dataStringfromDataString:importtime];
+    // 1.创建AFN管理者
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // 2.利用AFN管理者发送请求
+    NSDictionary *params = @{
+                             @"childID" : childId,
+                             @"importTime" : newImporttime,
+                             @"token" : self.token
+                             };
+    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataDelete" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"请求成功---%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败---%@", error);
+    }];
+
+}
+//将yyyy年M月d日格式的日期转成yyyy-MM-dd
+-(NSString *)dataStringfromDataString:(NSString *)datastring{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy年M月d日"];
+    NSDate *data =[formatter dateFromString:datastring];
+    NSDateFormatter *Dataformatter =[[NSDateFormatter alloc]init];
+    [Dataformatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *DateString = [Dataformatter stringFromDate:data];
+//    NSLog(@"``````````%@```````DateString:%@",data,DateString);
+    return DateString;
+}
+//判断是否有同一天的任何数据0:height  1:weight  2:headc  3:BMI
+-(BOOL)hasSameimportTimeData:(NSString *)importtime childModel:(CGChildModel *)childmodel type:(int)type{
+    switch (type) {
+        case 0:   //height
+        {
+            for (CGWeight *weightItem in childmodel.weightArr) {
+                if ([importtime isEqualToString:weightItem.time]) {
+                    return YES;
+                }
+            }
+           for (CGBMI *bmiItem in childmodel.BMIArr) {
+               if ([importtime isEqualToString:bmiItem.time]) {
+                    return YES;
+                }
+           }
+           for (CGHeadc *headcItem in childmodel.headcArr) {
+            if ([importtime isEqualToString:headcItem.time]) {
+                    return YES;
+                }
+            }
+           }
+            break;
+        case 1:    //weight
+        {
+            for (CGHeight *heightItem in childmodel.heightArr) {
+                if ([importtime isEqualToString:heightItem.time]) {
+                    return YES;
+                }
+            }
+            for (CGHeadc *headcItem in childmodel.headcArr) {
+                if ([importtime isEqualToString:headcItem.time]) {
+                    return YES;
+                }
+            }
+            for (CGBMI *bmiItem in childmodel.BMIArr) {
+                if ([importtime isEqualToString:bmiItem.time]) {
+                    return YES;
+                }
+            }
+            
+        }
+            break;
+        case 2:   //headc
+        {
+            for (CGHeight *heightItem in childmodel.heightArr) {
+                if ([importtime isEqualToString:heightItem.time]) {
+                    return YES;
+                }
+            }
+            for (CGBMI *bmiItem in childmodel.BMIArr) {
+                if ([importtime isEqualToString:bmiItem.time]) {
+                    return YES;
+                }
+            }
+            for (CGWeight *weightItem in childmodel.weightArr) {
+                if ([importtime isEqualToString:weightItem.time]) {
+                    return YES;
+                }
+            }
+        }
+            break;
+        case 3:   //bmi
+        {
+            for (CGHeight *heightItem in childmodel.heightArr) {
+                if ([importtime isEqualToString:heightItem.time]) {
+                    return YES;
+                }
+            }
+            for (CGWeight *weightItem in childmodel.weightArr) {
+                if ([importtime isEqualToString:weightItem.time]) {
+                    return YES;
+                }
+            }
+            for (CGHeadc *headcItem in childmodel.headcArr) {
+                if ([importtime isEqualToString:headcItem.time]) {
+                    return YES;
+                }
+            }
+        }
+            break;
+        default:
+            return NO;
+            break;
+    }
+    return NO;
+}
 #pragma mark - 协议实现
 -(void)addinforVC:(AddViewController *)addinforVC heightItem:(CGHeight *)heightItem{
-    //保存存放的数据(修改模型)
+    //1.创建队列
+    /*
+     第一个参数:C语言的字符串,标签
+     第二个参数:队列的类型
+     DISPATCH_QUEUE_CONCURRENT:并发
+     DISPATCH_QUEUE_SERIAL:串行
+     */
+    //dispatch_queue_t queue = dispatch_queue_create("com.520it.download", DISPATCH_QUEUE_CONCURRENT);
     
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_t group = dispatch_group_create();
+//    dispatch_queue_t queue = dispatch_queue_create("upload", DISPATCH_QUEUE_SERIAL);
+//      [self postEditData:heightItem.height importtime:heightItem.time type:0];
+    //保存存放的数据(修改模型)
     CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
     //输入时间判定（1，不能重复 。 2，不能早于出生）
     //不能早于出生
-
     [self isEarlythanbirthorOverrange:heightItem.time birthday:childmodel.age whattype:0 value:heightItem.height];
     //自动移除重复的
+    int same =0;
     for (CGHeight *height in childmodel.heightArr) {
         if([heightItem.time isEqualToString:height.time]){
             [childmodel.heightArr removeObject:height];
+            same = 1;
+                 // post修改
+                [self postEditData:heightItem.height importtime:heightItem.time type:0 childId:childmodel.ChildId];
         }
     }
-            [childmodel.heightArr addObject:heightItem];
+    //添加到数据数组
+    
+    if (childmodel.heightArr ==nil) {
+        childmodel.heightArr = [[NSMutableArray alloc]init];
+    }
+        [childmodel.heightArr addObject:heightItem];
+    //判断是否有同一天的任何数据
+    if (!same) {
+        if ([self hasSameimportTimeData:heightItem.time childModel:childmodel type:0]) {
+            
+                // post修改
+                [self postEditData:heightItem.height importtime:heightItem.time type:0 childId:childmodel.ChildId];
+
+        }
+        else{
+
+                // post上传
+                [self postdata:heightItem.height importtime:heightItem.time type:0 childId:childmodel.ChildId BirthDate:childmodel.age];
+
+        }
+    }
     //判断 身高体重若有相同日期。计算BMI
     for (CGHeight *height in childmodel.heightArr) {
         for (CGWeight *weight in childmodel.weightArr) {
@@ -2411,9 +2691,44 @@
                 CGBMI * bmi = [[CGBMI alloc]init];
                 bmi.time = weight.time;
                 float m= [height.height floatValue] *0.01;
-                float bvalue = [weight.weight floatValue] /pow(m, 2);;
+                float bvalue = [weight.weight floatValue] /pow(m, 2);
                 bmi.value = [NSNumber numberWithFloat:bvalue];
+                if (childmodel.BMIArr ==nil) {
+                    
+                    childmodel.BMIArr = [[NSMutableArray alloc]init];
+                }
                 [childmodel.BMIArr addObject:bmi];
+//                dispatch_async(queue, ^{
+//                    //post修改bmi
+//                    [self postEditData:bmi.value importtime:bmi.time type:3 childId:childmodel.ChildId];
+//                });
+                dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+//                NSString *token = [self readNSUserDefaultstoken];
+                NSString *parm =@"bmi";
+//                NSNumber *childID = [NSNumber numberWithInteger:childmodel.ChildId];
+                //    NSString *userAccount = @"123456";
+                dispatch_group_async(group, queue, ^{
+                    // 1.创建AFN管理者
+                    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+                    NSString *importTime = [self dataStringfromDataString:bmi.time];
+                    // 2.利用AFN管理者发送请求
+                    NSDictionary *params = @{
+                                             @"parm" : parm,
+                                             @"data" : bmi.value,
+                                             @"childID" : childmodel.ChildId,
+                                             @"importTime" : importTime,
+                                             @"token" : self.token
+                                             };
+                    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                        dispatch_semaphore_signal(semaphore);
+                        NSLog(@"请求成功---%@", responseObject);
+                    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                        NSLog(@"请求失败---%@", error);
+                    }];
+                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                });
+                break;
+                
             }
         }
     }
@@ -2445,20 +2760,92 @@
     //    NSLog(@"111111--111111");
 }
 -(void)addinforVC:(AddViewController *)addinforVC weightItem:(CGWeight *)weightItem{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_group_t group = dispatch_group_create();
+//    dispatch_queue_t queue = dispatch_queue_create("upload", DISPATCH_QUEUE_SERIAL);
     //保存存放的数据(修改模型)
     
     CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
     //输入时间判定（1，不能重复 。 2，不能早于出生）
     //不能早于出生
-
     [self isEarlythanbirthorOverrange:weightItem.time birthday:childmodel.age whattype:1 value:weightItem.weight];
+    
+    int same = 0;
     //自动移除重复的
     for (CGWeight *weight in childmodel.weightArr) {
         if([weightItem.time isEqualToString:weight.time]){
             [childmodel.weightArr removeObject:weight];
+            same = 1;
+                // post修改
+                [self postEditData:weightItem.weight importtime:weightItem.time type:1 childId:childmodel.ChildId];
+//            NSString *token = [self readNSUserDefaultstoken];
+//            NSString *parm =@"weight";
+//             NSString *childId = @"88888888";
+//            //    NSString *userAccount = @"123456";
+//            NSString *importTime = [self dataStringfromDataString:weightItem.time];
+//            // 1.创建AFN管理者
+//            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//            
+//            // 2.利用AFN管理者发送请求
+//            NSDictionary *params = @{
+//                                     @"parm" : parm,
+//                                     @"data" : weightItem.weight,
+//                                     @"childID" : childId,
+//                                     @"importTime" : importTime,
+//                                     @"token" : token
+//                                     };
+//            [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//               
+//                NSLog(@"请求成功---%@", responseObject);
+//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                NSLog(@"请求失败---%@", error);
+//            }];
+            
+            
         }
     }
+    if (childmodel.weightArr ==nil) {
+        childmodel.weightArr =[[NSMutableArray alloc]init];
+    }
     [childmodel.weightArr addObject:weightItem];
+    //判断是否有同一天的任何数据
+    if (!same) {
+        if ([self hasSameimportTimeData:weightItem.time childModel:childmodel type:1]) {
+
+                // post修改
+    [self postEditData:weightItem.weight importtime:weightItem.time type:1 childId:childmodel.ChildId];
+
+//            NSString *token = [self readNSUserDefaultstoken];
+//            NSString *parm =@"weight";
+//            NSString *childId = @"88888888";
+//            //    NSString *userAccount = @"123456";
+//            // 1.创建AFN管理者
+//            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//            
+//            // 2.利用AFN管理者发送请求
+//            NSDictionary *params = @{
+//                                     @"parm" : parm,
+//                                     @"data" : weightItem.weight,
+//                                     @"childID" : childId,
+//                                     @"importTime" : weightItem.time,
+//                                     @"token" : token
+//                                     };
+//            [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//                
+//                NSLog(@"请求成功---%@", responseObject);
+//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//                NSLog(@"请求失败---%@", error);
+//            }];
+            
+        }
+        else{
+//            dispatch_async(queue, ^{
+                // post上传
+                [self postdata:weightItem.weight importtime:weightItem.time type:1 childId:childmodel.ChildId BirthDate:childmodel.age];
+//            });
+        }
+    }
+        
     //判断 身高体重若有相同日期。计算BMI
     for (CGHeight *height in childmodel.heightArr) {
         for (CGWeight *weight in childmodel.weightArr) {
@@ -2473,10 +2860,48 @@
                 float m= [height.height floatValue] *0.01;
                 float bvalue = [weight.weight floatValue] /(m*m);
                 bmi.value = [NSNumber numberWithFloat:bvalue];
+                if (childmodel.BMIArr ==nil) {
+                    
+                    childmodel.BMIArr = [[NSMutableArray alloc]init];
+                }
                 [childmodel.BMIArr addObject:bmi];
+//                dispatch_async(queue, ^{
+                    //post修改bmi
+//                    [self postEditData:bmi.value importtime:bmi.time type:3];
+//                });
+                
+                
+//                NSString *token = [self readNSUserDefaultstoken];
+                NSString *parm =@"bmi";
+//                NSNumber *childID = [NSNumber numberWithInteger:childmodel.ChildId];
+                //    NSString *userAccount = @"123456";
+               dispatch_group_async(group, queue, ^{
+                   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                // 1.创建AFN管理者
+                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+                   NSString *importTime = [self dataStringfromDataString:bmi.time];
+                // 2.利用AFN管理者发送请求
+                NSDictionary *params = @{
+                                         @"parm" : parm,
+                                         @"data" : bmi.value,
+                                         @"childID" : childmodel.ChildId,
+                                         @"importTime" : importTime,
+                                         @"token" : self.token
+                                         };
+                [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                    dispatch_semaphore_signal(semaphore);
+                    NSLog(@"请求成功---%@", responseObject);
+                } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                    NSLog(@"请求失败---%@", error);
+                }];
+                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+               });
+                break;
             }
+           
         }
     }
+
     //保存
     self.childs[[self.childindex integerValue]] =childmodel;
     
@@ -2486,21 +2911,44 @@
     //    NSLog(@"2222222--22222222");
 }
 -(void)addinforVC:(AddViewController *)addinforVC headcItem:(CGHeadc *)headcItem{
+    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     //保存存放的数据(修改模型)
-    
     CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
     //输入时间判定（1，不能重复 。 2，不能早于出生）
     //不能早于出生
 //    [self isEarlythanbirth:headcItem.time birthday:childmodel.age];
     [self isEarlythanbirthorOverrange:headcItem.time birthday:childmodel.age whattype:2 value:headcItem.headc];
     //自动移除重复的
+    int same = 0;
     for (CGHeadc *headc in childmodel.weightArr) {
         if([headcItem.time isEqualToString:headc.time]){
             [childmodel.headcArr removeObject:headc];
+            same = 1;
+            dispatch_async(queue, ^{
+                // post修改
+                [self postEditData:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId];
+            });
         }
     }
+    if (childmodel.headcArr ==nil) {
+        childmodel.headcArr = [[NSMutableArray alloc]init];
+    }
     [childmodel.headcArr addObject:headcItem];
-
+    //判断是否有同一天的任何数据
+    if (!same) {
+        if ([self hasSameimportTimeData:headcItem.time childModel:childmodel type:2]) {
+            dispatch_async(queue, ^{
+                // post修改
+                [self postEditData:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId];
+            });
+        }
+        else{
+            dispatch_async(queue, ^{
+                // post上传
+                [self postdata:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId BirthDate:childmodel.age];
+            });
+        }
+    }
     self.childs[[self.childindex integerValue]] =childmodel;
     
     [self writeAllChildInfortoPlist];
@@ -2508,12 +2956,73 @@
     [self reloadall];
     //    NSLog(@"333333333--33333333");
 }
--(void)deleteforVC:(DeleteTableViewController *)deleteforVC childItem:(CGChildModel *)childItem{
+-(void)deleteforVC:(DeleteTableViewController *)deleteforVC childItem:(CGChildModel *)childItem deleteItem:(NSMutableArray *)deleteitem{
     //保存存放的数据(修改模型)
     self.childs[[self.childindex integerValue]] = childItem;
     [self writeAllChildInfortoPlist];
     //刷新图表
     [self reloadall];
+    //将修改上传云端
+    NSArray *heightArr = deleteitem[0];
+    NSArray *weightArr = deleteitem[1];
+    NSArray *headcArr = deleteitem[2];
+    NSArray *BMIArr = deleteitem[3];
+    if (![heightArr isKindOfClass:[NSNull class]]) {
+        for (NSDictionary *heightDic in heightArr) {
+            NSString *time= [heightDic objectForKey:@"time"];
+            
+            if ([self hasSameimportTimeData:time childModel:childItem type:0]) {
+                //修改
+                NSNumber *height = [heightDic objectForKey:@"height"];
+                [self postEditData:height importtime:time type:0 childId:childItem.ChildId];
+            }else {
+            //删除
+                [self postDelete:time childId:childItem.ChildId];
+            }
+        }
+    }
+    if (![weightArr isKindOfClass:[NSNull class]]) {
+        for (NSDictionary *weightDic in weightArr) {
+            NSString *time= [weightDic objectForKey:@"time"];
+            
+            if ([self hasSameimportTimeData:time childModel:childItem type:1]) {
+                //修改
+                NSNumber *weight = [weightDic objectForKey:@"weight"];
+                [self postEditData:weight importtime:time type:1 childId:childItem.ChildId];
+            }else {
+                //删除
+                [self postDelete:time childId:childItem.ChildId];
+            }
+        }
+    }
+    if (![headcArr isKindOfClass:[NSNull class]]) {
+        for (NSDictionary *headcDic in headcArr) {
+            NSString *time= [headcDic objectForKey:@"time"];
+            
+            if ([self hasSameimportTimeData:time childModel:childItem type:2]) {
+                //修改
+                NSNumber *height = [headcDic objectForKey:@"height"];
+                [self postEditData:height importtime:time type:2 childId:childItem.ChildId];
+            }else {
+                //删除
+                [self postDelete:time childId:childItem.ChildId];
+            }
+        }
+    }
+    if (![BMIArr isKindOfClass:[NSNull class]]) {
+        for (NSDictionary *bmiDic in BMIArr) {
+            NSString *time= [bmiDic objectForKey:@"time"];
+            
+            if ([self hasSameimportTimeData:time childModel:childItem type:3]) {
+                //修改
+                NSNumber *bmi = [bmiDic objectForKey:@"value"];
+                [self postEditData:bmi importtime:time type:3 childId:childItem.ChildId];
+            }else {
+                //删除
+                [self postDelete:time childId:childItem.ChildId];
+            }
+        }
+    }
 }
 //保存数据到NSUserDefaults
 -(void)saveNSUserDefaults
@@ -2535,11 +3044,21 @@
 {
     NSUserDefaults *userDefaultes = [NSUserDefaults standardUserDefaults];
     
-    //读取数据到各个label中
-    //读取整型int类型的数据
-    
     //读取NSDate日期类型的数据
     NSNumber *childindex = [userDefaultes valueForKey:@"childindex"];
+    NSString *token = [userDefaultes valueForKey:@"token"];
+    NSString *userAccount = [userDefaultes valueForKey:@"userAccount"];
     self.childindex = childindex;
+    self.token = token;
+    self.userAccount = userAccount;
 }
+//从NSUserDefaults中读取token数据
+//-(NSString *)readNSUserDefaultstoken
+//{
+//    NSUserDefaults *userDefaultes = [NSUserDefaults standardUserDefaults];
+//    
+//    //读取NSString类型的数据
+//    NSString *token = [userDefaultes valueForKey:@"token"];
+//     return token;
+//}
 @end
