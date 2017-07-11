@@ -318,7 +318,7 @@
                              @"userAccount" : user.text,
                              @"userPassword" : pwd.text
                              };
-    [manager POST:@"http://192.168.1.121/childGrow/Mobile/login" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:@"http://121.40.89.113/childGrow/Mobile/login" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSDictionary *dict = responseObject;
         if ([[dict objectForKey:@"flag"]  isEqual:@1]) {
             //1、记录token到userdeafult
@@ -341,12 +341,21 @@
                     NSString *birthdate =[childinfo objectForKey:@"childbirthdate"];
                     NSString *childbirthdate = [self dataStringfromDataString:birthdate];
                     NSString *childsex =[childinfo objectForKey:@"childsex"];
+                    NSString *fatherHeight = [childinfo objectForKey:@"fatherheight"];
+                    NSString *motherHeight = [childinfo objectForKey:@"motherheight"];
+                    NSString *oregnancy = [childinfo objectForKey:@"fullmonth"];
+
                     NSMutableDictionary *childdic= [[NSMutableDictionary alloc]initWithDictionary:@{
                                                                                                     @"ChildId":childid,
                                                                                                     @"name":childname,
                                                                                                     @"age":childbirthdate,
                                                                                                     @"sex":childsex,
-                                                                                                    @"icon":@""
+                                                                                                    @"icon":@"",
+                                                                                                    @"fatherHeight":fatherHeight,
+                                                                                                    
+                                                                @"motherHeight":motherHeight,
+                                                                                                    
+                                                                @"oregnancy":oregnancy
                                                                                                     }];
                     [childArr addObject:childdic];
                 }
@@ -452,6 +461,8 @@
         }
         NSLog(@"请求成功---%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [MBProgressHUD hideHUDForView:self.view];
+        [MBProgressHUD showError:@"请求超时"];
         NSLog(@"请求失败---%@", error);
     }];
 

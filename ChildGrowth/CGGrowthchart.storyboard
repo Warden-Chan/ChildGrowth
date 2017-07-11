@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2BL-vv-FNV">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2BL-vv-FNV">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,18 +39,18 @@
                                 <rect key="frame" x="0.0" y="56" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="L84-i7-0wB" id="gtw-CM-FDt">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="k9P-XM-AKY">
-                                            <rect key="frame" x="15" y="14" width="91" height="15"/>
+                                            <rect key="frame" x="15" y="15" width="91" height="14.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3IA-gs-BpY">
-                                            <rect key="frame" x="112" y="14" width="33" height="15"/>
+                                            <rect key="frame" x="112" y="15" width="33" height="14.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -86,8 +86,8 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0kd-lB-7Ey">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DSB-Ac-w1m">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="805"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DSB-Ac-w1m">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="870"/>
                                         <subviews>
                                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="LBA-cu-koE">
                                                 <rect key="frame" x="20" y="92" width="335" height="29"/>
@@ -98,7 +98,6 @@
                                                     <segment title="Z评分"/>
                                                     <segment title="百分位"/>
                                                 </segments>
-                                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="ZorPercentChange:" destination="8rJ-Kc-sve" eventType="valueChanged" id="6ce-li-ElO"/>
                                                 </connections>
@@ -112,7 +111,6 @@
                                                     <segment title="WHO标准"/>
                                                     <segment title="中国9城市标准"/>
                                                 </segments>
-                                                <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <connections>
                                                     <action selector="StandardTypeChange:" destination="8rJ-Kc-sve" eventType="valueChanged" id="Ntn-8Y-BPx"/>
                                                 </connections>
@@ -147,9 +145,9 @@
                                         </subviews>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" constant="870" id="1DV-Pp-I78"/>
                                             <constraint firstItem="OmH-ai-RHg" firstAttribute="leading" secondItem="DSB-Ac-w1m" secondAttribute="leading" constant="2" id="2mD-m6-pRy"/>
                                             <constraint firstItem="miF-7a-K9W" firstAttribute="leading" secondItem="DSB-Ac-w1m" secondAttribute="leading" id="6tm-Lr-hfj"/>
-                                            <constraint firstAttribute="height" constant="780" id="9N8-gE-VBt"/>
                                             <constraint firstAttribute="trailing" secondItem="miF-7a-K9W" secondAttribute="trailing" id="AOi-sE-D7r"/>
                                             <constraint firstItem="LBA-cu-koE" firstAttribute="leading" secondItem="DSB-Ac-w1m" secondAttribute="leading" constant="20" id="CTd-lB-z70"/>
                                             <constraint firstAttribute="trailing" secondItem="EWF-Ev-DT4" secondAttribute="trailing" constant="20" id="D0D-5c-xl1"/>

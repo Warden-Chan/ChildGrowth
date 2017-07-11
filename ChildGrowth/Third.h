@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 @interface Third : NSObject
 /** 身高超过百分数 */
-@property (nonatomic) CGFloat *height;
+@property (nonatomic) CGFloat height;
 /** 体重超过百分数 */
-@property (nonatomic) CGFloat *weight;
+@property (nonatomic) CGFloat weight;
 @end

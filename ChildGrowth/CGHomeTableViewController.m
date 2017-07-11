@@ -17,6 +17,7 @@
 #import "CGChildModel.h"
 #import "Fourth.h"
 #import "FourthCell.h"
+#import "AFHTTPSessionManager.h"
 
 @interface CGHomeTableViewController ()<SYNavigationDropdownMenuDataSource, SYNavigationDropdownMenuDelegate>
 /** 所有的数据 */
@@ -93,6 +94,7 @@ NSString *ID4 = @"fourth";
         _childs = [CGChildModel mj_objectArrayWithFilename:@"ChildInformation.plist"];
     }
     NSString *tittle = [self titleArray][[self.childindex integerValue]];
+//    NSString *tittle = [self titleArray][0];
    [self.menu setTitle:tittle forState:UIControlStateNormal];
 //    [self navigationDropdownMenu:self.menu didSelectTitleAtIndex:[self.childindex intValue]];
 
@@ -216,9 +218,13 @@ NSString *ID4 = @"fourth";
         return cell;
     }
     else if(indexPath.section == 1){
+        CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
+        CGHeight *heightitem = childmodel.heightArr.lastObject;
+        [self getSameAgeNumber:childmodel.ChildId childBirthdate:childmodel.age latestDate:childmodel.age];
         // 访问缓存池
         ThirdCell *cell = [tableView dequeueReusableCellWithIdentifier:ID3];
         [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+        
         return cell;
     }
     else{
@@ -322,6 +328,35 @@ NSString *ID4 = @"fourth";
     }else {
     return 160;
     }
+}
+-(void)getSameAgeNumber:(NSString *)childId childBirthdate:(NSString *)childBirthdate latestDate:(NSString *)latestDate{
+    NSString *childBirthdateAfter = [self dataStringfromDataString:childBirthdate];
+    // 1.创建AFN管理者
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    // 2.利用AFN管理者发送请求
+    NSDictionary *params = @{
+                             @"childID" : childId,
+                             @"childBirthdate" : childBirthdateAfter,
+                             @"latestDate" : childBirthdateAfter,
+                             @"token" : self.token
+                             };
+    [manager POST:@"http://121.40.89.113/childGrow/Mobile/childDataOrder" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"请求成功---%@", responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"请求失败---%@", error);
+    }];
+}
+//将yyyy年M月d日格式的日期转成yyyy-MM-dd
+-(NSString *)dataStringfromDataString:(NSString *)datastring{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    [formatter setDateFormat:@"yyyy年M月d日"];
+    NSDate *data =[formatter dateFromString:datastring];
+    NSDateFormatter *Dataformatter =[[NSDateFormatter alloc]init];
+    [Dataformatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *DateString = [Dataformatter stringFromDate:data];
+    //    NSLog(@"``````````%@```````DateString:%@",data,DateString);
+    return DateString;
 }
 //输入时间，得到具体年龄:年月日
 -(NSString *)getConcreteAge:(NSString *)birth ismouth:(BOOL)ismouth{

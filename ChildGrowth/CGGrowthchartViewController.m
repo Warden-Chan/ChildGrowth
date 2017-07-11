@@ -42,6 +42,7 @@
 @property (nonatomic, strong) NSArray *weightdataArr;
 @property (nonatomic, strong) NSArray *headcdataArr;
 @property (nonatomic, strong) NSArray *BMIdataArr;
+@property (nonatomic, strong) NSArray *EarlydataArr;
 @property (nonatomic, strong) NSArray *percentUnscramble;
 //@property (nonatomic, strong) NSMutableArray *values1;
 //@property (nonatomic, strong) NSMutableArray *values2;
@@ -60,6 +61,14 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *ZorPercent;
 /**曲线图内容类型**/
 @property (weak, nonatomic) IBOutlet UISegmentedControl *ChartType;
+/**图表y坐标单位**/
+@property(strong, nonatomic) UILabel *ChartsYlabel;
+/**图表x坐标单位**/
+@property(strong, nonatomic) UILabel *ChartsXlabel;
+/**靶身高按钮**/
+@property(strong, nonatomic) UIButton *labelHeightBtn;
+/**靶身高**/
+@property(strong, nonatomic) UILabel *labelHeight;
 /**曲线解读**/
 @property(strong, nonatomic) UILabel *label0;
 /**当前身高，超过多少百分比**/
@@ -78,8 +87,7 @@
 - (IBAction)ZorPercentChange:(id)sender;
 
 - (IBAction)CharttpyeChange:(id)sender;
-/** 曲线数据 */
-@property (nonatomic, strong) NSArray *TypeArr;
+
 @end
 
 @implementation CGGrowthchartViewController
@@ -98,22 +106,12 @@
     return _childs;
 }
 
-- (NSArray *)TypeArr{
-    if (_TypeArr == nil) {
-        // 加载数据
-        NSBundle *bundle = [NSBundle mainBundle];
-        NSString *path = [bundle pathForResource:@"CGChartType" ofType:@"plist"];
-        self.TypeArr = [NSArray arrayWithContentsOfFile:path];
-        
-    }
-    return _TypeArr;
-}
 - (NSArray *)percentUnscramble{
     if (_percentUnscramble == nil) {
         // 加载数据
         NSBundle *bundle = [NSBundle mainBundle];
         NSString *path = [bundle pathForResource:@"percentUnscramble" ofType:@"plist"];
-        self.percentUnscramble = [NSArray arrayWithContentsOfFile:path];
+        _percentUnscramble = [NSArray arrayWithContentsOfFile:path];
         
     }
     return _percentUnscramble;
@@ -123,7 +121,7 @@
         // 加载数据
         NSBundle *bundle = [NSBundle mainBundle];
         NSString *path = [bundle pathForResource:@"height" ofType:@"plist"];
-        self.heightdataArr = [NSArray arrayWithContentsOfFile:path];
+        _heightdataArr = [NSArray arrayWithContentsOfFile:path];
         
     }
     return _heightdataArr;
@@ -133,7 +131,7 @@
         // 加载数据
         NSBundle *bundle = [NSBundle mainBundle];
         NSString *path = [bundle pathForResource:@"weight" ofType:@"plist"];
-        self.weightdataArr = [NSArray arrayWithContentsOfFile:path];
+        _weightdataArr = [NSArray arrayWithContentsOfFile:path];
         
     }
     return _weightdataArr;
@@ -143,7 +141,7 @@
         // 加载数据
         NSBundle *bundle = [NSBundle mainBundle];
         NSString *path = [bundle pathForResource:@"headc" ofType:@"plist"];
-        self.headcdataArr = [NSArray arrayWithContentsOfFile:path];
+        _headcdataArr = [NSArray arrayWithContentsOfFile:path];
         
     }
     return _headcdataArr;
@@ -153,10 +151,20 @@
         // 加载数据
         NSBundle *bundle = [NSBundle mainBundle];
         NSString *path = [bundle pathForResource:@"BMI" ofType:@"plist"];
-        self.BMIdataArr = [NSArray arrayWithContentsOfFile:path];
+        _BMIdataArr = [NSArray arrayWithContentsOfFile:path];
         
     }
     return _BMIdataArr;
+}
+-(NSArray *)EarlydataArr{
+    if (_EarlydataArr == nil) {
+        // 加载数据
+        NSBundle *bundle = [NSBundle mainBundle];
+        NSString *path = [bundle pathForResource:@"Earlydata" ofType:@"plist"];
+        _EarlydataArr = [NSArray arrayWithContentsOfFile:path];
+        
+    }
+    return _EarlydataArr;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -181,7 +189,43 @@
     //    _chartView.backgroundColor = [UIColor clearColor];
     //    [self.view addSubview:_chartView];
     //    [self loadLineChart];
+    
+    [self creatTextLabelBtn];
+    [self reloadall];
+
+}
+-(void)creatTextLabelBtn{
     UIColor *color = [UIColor colorWithHexString:@"0997F7"];
+    
+    _ChartsYlabel =[[UILabel alloc]initWithFrame:CGRectMake(2,156,40,16)];
+    [self.scrollView addSubview:_ChartsYlabel];
+    _ChartsYlabel.textAlignment = NSTextAlignmentCenter;
+    _ChartsYlabel.font = [UIFont fontWithName:@"Arial" size:9.0f];
+    _ChartsYlabel.numberOfLines = 0;
+    
+    
+    _ChartsXlabel =[[UILabel alloc]initWithFrame:CGRectMake(screenWidth-40,self.view.bounds.size.height-145,40,15)];
+    [self.scrollView addSubview:_ChartsXlabel];
+    _ChartsXlabel.textAlignment = NSTextAlignmentCenter;
+    _ChartsXlabel.font = [UIFont fontWithName:@"Arial" size:9.0f];
+    _ChartsXlabel.numberOfLines = 0;
+    
+    
+    _labelHeightBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    _labelHeightBtn.frame = CGRectMake(10,CGRectGetMaxY(self.chartView.frame), 100, 20);
+    
+    [self.scrollView addSubview:_labelHeightBtn];
+    [_labelHeightBtn setTitle:@"靶身高:" forState:UIControlStateNormal];
+    _labelHeightBtn.titleLabel.font = [UIFont fontWithName:@"Arial" size:16.0f];
+    [_labelHeightBtn addTarget:self action:@selector(baHeight) forControlEvents:UIControlEventTouchUpInside];
+    
+    _labelHeight = [[UILabel alloc]initWithFrame:CGRectMake(110,CGRectGetMaxY(self.chartView.frame), self.view.bounds.size.width-110, 20)];
+    [self.scrollView addSubview:_labelHeight];
+    _labelHeight.textAlignment = NSTextAlignmentLeft;
+    _labelHeight.font = [UIFont fontWithName:@"Arial" size:16.0f];
+    
+    
+    
     _label0 = [[UILabel alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(self.chartView.frame)+20, self.view.bounds.size.width-20, 20)];
     [self.scrollView addSubview:_label0];
     _label0.textAlignment = NSTextAlignmentLeft;
@@ -194,7 +238,7 @@
     _label.textAlignment = NSTextAlignmentCenter;
     _label.numberOfLines = 0;
     _label.font = [UIFont fontWithName:@"Arial" size:16.0f];
-
+    
     
     
     _label2 = [[UILabel alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(self.label.frame)+30, self.view.bounds.size.width-20, 20)];
@@ -203,10 +247,10 @@
     _label2.font = [UIFont fontWithName:@"Arial" size:17.0f];
     _label2.textColor = color;
     
-//    _pimageView = [[UIImageView alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(self.label2.frame)+10, self.view.bounds.size.width-20, 70)];
-//    UIImage *image = [UIImage imageNamed:@"pimage"];
-//    _pimageView.image = image;
-//    [self.scrollView addSubview:_pimageView];
+    //    _pimageView = [[UIImageView alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(self.label2.frame)+10, self.view.bounds.size.width-20, 70)];
+    //    UIImage *image = [UIImage imageNamed:@"pimage"];
+    //    _pimageView.image = image;
+    //    [self.scrollView addSubview:_pimageView];
     
     NSArray *views = [[NSBundle mainBundle] loadNibNamed:@"percentImage" owner:nil options:nil];
     _pimage = views[0];
@@ -215,23 +259,30 @@
     self.pimage = _pimage;
     //评测结果
     _label1 = [[UILabel alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(self.pimage.frame), self.view.bounds.size.width-20,80)];
-//    [self.scrollView addSubview:_label1];
+    //    [self.scrollView addSubview:_label1];
     _label1.textAlignment = NSTextAlignmentLeft;
     _label1.numberOfLines = 0;
     _label1.font = [UIFont fontWithName:@"Arial" size:16.0f];
     
-    _label3 = [[UILabel alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(self.label1.frame)+10, self.view.bounds.size.width-20, 60)];
+    _label3 = [[UILabel alloc]initWithFrame:CGRectMake(10,CGRectGetMaxY(self.label1.frame)+10, self.view.bounds.size.width-20, 50)];
     [self.scrollView addSubview:_label3];
     _label3.textAlignment = NSTextAlignmentCenter;
     _label3.numberOfLines = 0;
     UIColor *color1 = [UIColor colorWithHexString:@"7A7A7A"];
     _label3.font = [UIFont fontWithName:@"Arial" size:12.0f];
     
-//
+    //
     _label3.textColor = color1;
+}
+-(void)baHeight{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"" message:@"靶身高即遗传靶身高，是指根据儿童父母的身高计算出来的该儿童的遗传身高值。" preferredStyle:UIAlertControllerStyleAlert];
     
-    [self reloadall];
-
+    [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        NSLog(@"点击确认");
+        
+    }]];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 -(CGFloat)getHeightByWidth:(CGFloat)width title:(NSString *)title font:(UIFont *)font
 {
@@ -276,7 +327,7 @@
         [self.scrollView addSubview:chartview];
         self.chartView = chartview;
     //    _chartView.delegate = self;
-   _chartView.descriptionText= @"单位/岁";
+   _chartView.chartDescription.text= @"单位/岁";
 //    NSLog(@"%@",_chartView.descriptionText);
         _chartView.chartDescription.enabled = NO;
         _chartView.noDataText = @"暂时没有数据";
@@ -286,13 +337,12 @@
         _chartView.drawGridBackgroundEnabled = NO;
     _chartView.xAxis.labelPosition = 1;   //X轴的位置
         // x-axis limit line
-        ChartLimitLine *llXAxis = [[ChartLimitLine alloc] initWithLimit:10.0 label:@"Index 10"];
-        llXAxis.lineWidth = 4.0;
-        llXAxis.lineDashLengths = @[@(10.f), @(10.f), @(0.f)];
-        llXAxis.labelPosition = ChartLimitLabelPositionRightBottom;
-        llXAxis.valueFont = [UIFont systemFontOfSize:10.f];
-        //[_chartView.xAxis addLimitLine:llXAxis];
-    
+//        ChartLimitLine *llXAxis = [[ChartLimitLine alloc] initWithLimit:10.0 label:@"Index 10"];
+//        llXAxis.lineWidth = 4.0;
+//        llXAxis.lineDashLengths = @[@(10.f), @(10.f), @(0.f)];
+//        llXAxis.labelPosition = ChartLimitLabelPositionRightBottom;
+//        llXAxis.valueFont = [UIFont systemFontOfSize:10.f];
+//        [_chartView.xAxis addLimitLine:llXAxis]; //2222
         _chartView.xAxis.gridLineDashLengths = @[@10.0, @10.0];
         _chartView.xAxis.gridLineDashPhase = 0.f;
     //
@@ -460,10 +510,20 @@
      [_chartView setNeedsDisplay];
     //得到存放的数据
     CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
+    double mouth = [[self getConcreteAge:childmodel.age ismouth:YES] intValue];
     //    NSString *str1 = @"2012年8月2日";
     //    NSString *str2 = @"2013年8月2日";
     //   BOOL blllo = [self timeCompare:str1 sDate:str2];
     //    [self.chartView stringByEvaluatingJavaScriptFromString:@""];
+    BOOL isEarlyP = NO;
+    if (mouth <=7) {
+        if (childmodel.oregnancy !=nil && [childmodel.oregnancy compare:@37] ==-1) {
+            if ([childmodel.oregnancy intValue]+4*mouth <=50) {
+                //显示早产
+                isEarlyP = YES;
+            }
+        }
+    }
     switch (self.ChartType.selectedSegmentIndex) {
             
         case 0:    //身高
@@ -483,7 +543,7 @@
             NSArray *outArray = [childmodel.heightArr sortedArrayUsingComparator:cmptr];
             [childmodel.heightArr removeAllObjects];
             [childmodel.heightArr addObjectsFromArray:outArray];
-            [self reloadheight:childmodel];
+            [self reloadheight:childmodel isEarlyP:isEarlyP];
             break;
         }
         case 1:    //体重
@@ -503,7 +563,7 @@
             NSArray *outArray = [childmodel.weightArr sortedArrayUsingComparator:cmptr];
             [childmodel.weightArr removeAllObjects];
             [childmodel.weightArr addObjectsFromArray:outArray];
-            [self reloadweight:childmodel];
+            [self reloadweight:childmodel isEarlyP:isEarlyP];
             break;
         }
         case 2:    //头围
@@ -523,7 +583,7 @@
             NSArray *outArray = [childmodel.headcArr sortedArrayUsingComparator:cmptr];
             [childmodel.headcArr removeAllObjects];
             [childmodel.headcArr addObjectsFromArray:outArray];
-            [self reloadheadc:childmodel];
+            [self reloadheadc:childmodel isEarlyP:isEarlyP];
             break;
         }
         case 3:     //BMI
@@ -543,36 +603,56 @@
             NSArray *outArray = [childmodel.BMIArr sortedArrayUsingComparator:cmptr];
             [childmodel.BMIArr removeAllObjects];
             [childmodel.BMIArr addObjectsFromArray:outArray];
-            [self reloadBMI:childmodel];
+            [self reloadBMI:childmodel isEarlyP:isEarlyP];
             break;
         }
         default:
             break;
     }
 }
--(void)reloadheight:(CGChildModel *)childmodel{
-    NSArray *outArray = childmodel.heightArr;
-
-//                childmodel.heightArr = outArray;
-    //    NSLog(@"%@",outArray);
-    //获取最大和最小测量年龄(单位月)
-    CGHeight *firstheightItem = [outArray lastObject];
-    NSString *firsttime = firstheightItem.time;
-    CGHeight *lastheightItem = [outArray firstObject];
-    NSString *lastttime = lastheightItem.time;
-    int minmouth = [[self getCompareAge:childmodel.age latestDay:lastttime] intValue];
-    int maxmouth = [[self getCompareAge:childmodel.age latestDay:firsttime] intValue];
-//    int minmouth = [[self getConcreteAge:firsttime ismouth:YES] intValue];
-//    int maxmouth = [[self getConcreteAge:lastttime ismouth:YES] intValue];
-    int chartage = 0;
-    //判别显示那种时间段曲线
-    chartage = [self getChartAgeRange:minmouth Maxmouth:maxmouth whatTypeArr:@"height"];
-    [self updateLineChart:self.heightdataArr chartage:chartage whatTypeArr:0];
+-(void)reloadheight:(CGChildModel *)childmodel isEarlyP:(BOOL)isEarlyP{
+    if (!isEarlyP) {
+        NSArray *outArray = childmodel.heightArr;
+        
+        //                childmodel.heightArr = outArray;
+        //    NSLog(@"%@",outArray);
+        //获取最大和最小测量年龄(单位月)
+        CGHeight *firstheightItem = [outArray lastObject];
+        NSString *firsttime = firstheightItem.time;
+        CGHeight *lastheightItem = [outArray firstObject];
+        NSString *lastttime = lastheightItem.time;
+        int minmouth = [[self getCompareAge:childmodel.age latestDay:lastttime] intValue];
+        int maxmouth = [[self getCompareAge:childmodel.age latestDay:firsttime] intValue];
+        //    int minmouth = [[self getConcreteAge:firsttime ismouth:YES] intValue];
+        //    int maxmouth = [[self getConcreteAge:lastttime ismouth:YES] intValue];
+        int chartage = 0;
+        //判别显示那种时间段曲线
+        chartage = [self getChartAgeRange:minmouth Maxmouth:maxmouth whatTypeArr:@"height"];
+        [self updateLineChart:self.heightdataArr chartage:chartage whatTypeArr:0];
+    }else{
+        [self updateEarlyLineChart:self.EarlydataArr whatTypeArr:0];
+    }
+    
+    
+    self.ChartsYlabel.text = @"单位/cm";
+    if (childmodel.fatherHeight !=nil && childmodel.motherHeight !=nil) {
+        float height =0;
+        if ([childmodel.sex isEqualToString:@"男"]) {
+            height = 45.99 +0.78*([childmodel.fatherHeight floatValue] +[childmodel.motherHeight floatValue])/2;
+        }else{
+            height = 37.85 +0.75*([childmodel.fatherHeight floatValue] +[childmodel.motherHeight floatValue])/2;
+        }
+        self.labelHeight.text = [NSString stringWithFormat:@"%.2f±5.29CM",height];
+    }else{
+        self.labelHeight.text = nil;
+    }
+    
     
 }
 
 
--(void)reloadweight:(CGChildModel *)childmodel{
+-(void)reloadweight:(CGChildModel *)childmodel isEarlyP:(BOOL)isEarlyP{
+    if (!isEarlyP) {
     NSArray *outArray = childmodel.weightArr;
 //            childmodel.heightArr = outArray;
     //获取最大和最小测量年龄(单位月)
@@ -585,10 +665,15 @@
     int chartage = 0;
     //判别显示那种时间段曲线
     chartage = [self getChartAgeRange:minmouth Maxmouth:maxmouth whatTypeArr:@"weight"];
-    [self updateLineChart:self.weightdataArr chartage:chartage whatTypeArr:1];
     
+    [self updateLineChart:self.weightdataArr chartage:chartage whatTypeArr:1];
+    }else{
+        [self updateEarlyLineChart:self.EarlydataArr whatTypeArr:1];
+    }
+    self.ChartsYlabel.text = @"单位/kg";
 }
--(void)reloadheadc:(CGChildModel *)childmodel{
+-(void)reloadheadc:(CGChildModel *)childmodel isEarlyP:(BOOL)isEarlyP{
+    if (!isEarlyP) {
     NSArray *outArray = childmodel.headcArr;
     //            childmodel.heightArr = outArray;
     //获取最大和最小测量年龄(单位月)
@@ -602,8 +687,13 @@
     //判别显示那种时间段曲线
     chartage = [self getChartAgeRange:minmouth Maxmouth:maxmouth whatTypeArr:@"headc"];
     [self updateLineChart:self.headcdataArr chartage:chartage whatTypeArr:2];
+    }else{
+        [self updateEarlyLineChart:self.EarlydataArr whatTypeArr:2];
+    }
+    self.ChartsYlabel.text = @"单位/cm";
 }
--(void)reloadBMI:(CGChildModel *)childmodel{
+-(void)reloadBMI:(CGChildModel *)childmodel isEarlyP:(BOOL)isEarlyP{
+    if (!isEarlyP) {
   NSArray *outArray = childmodel.BMIArr;
     //            childmodel.heightArr = outArray;
     //获取最大和最小测量年龄(单位月)
@@ -617,6 +707,10 @@
     //判别显示那种时间段曲线
     chartage = [self getChartAgeRange:minmouth Maxmouth:maxmouth whatTypeArr:@"BMI"];
     [self updateLineChart:self.BMIdataArr chartage:chartage whatTypeArr:3];
+    }else{
+        [self updateEarlyLineChart:self.EarlydataArr whatTypeArr:3];
+    }
+    self.ChartsYlabel.text = @"";
 }
 -(int)getChartAgeRange:(int)minmouth Maxmouth:(int)maxmouth whatTypeArr:(NSString *)whatTypeArr{
     int chartage;
@@ -740,11 +834,308 @@
     return set;
 }
 //whatTypeArr :  0:height  1:weight  2:headc  3:BMI
+-(void)updateEarlyLineChart:(NSArray *)typeArr whatTypeArr:(int)whatTypeArr{
+     if (whatTypeArr !=3) {
+    CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
+    NSString *SexStr = childmodel.sex;
+    BOOL childSex  = [SexStr isEqualToString:@"女"];
+    NSMutableArray *values1 = [[NSMutableArray alloc] init];
+    NSMutableArray *values2 = [[NSMutableArray alloc] init];
+    NSMutableArray *values3 = [[NSMutableArray alloc] init];
+    NSMutableArray *values4 = [[NSMutableArray alloc] init];
+    NSMutableArray *values5 = [[NSMutableArray alloc] init];
+    NSMutableArray *values6 = [[NSMutableArray alloc] init];
+    LineChartDataSet *set1 = nil, *set2 = nil, *set3 = nil, *set4 = nil, *set5 = nil, *set6 = nil;
+    NSArray *valArr1 = typeArr[whatTypeArr][childSex][0];
+    NSArray *valArr2 = typeArr[whatTypeArr][childSex][1];
+    NSArray *valArr3 = typeArr[whatTypeArr][childSex][2];
+    NSArray *valArr4 = typeArr[whatTypeArr][childSex][3];
+    NSArray *valArr5 = typeArr[whatTypeArr][childSex][4];
+
+    _label2.text = @"百分位解读：";
+    if (whatTypeArr ==0) {
+        for (CGHeight *heightItem in childmodel.heightArr) {
+            double mouth = [[self getCompareAge:childmodel.age latestDay:heightItem.time] doubleValue];
+            double week =mouth*4 +[childmodel.oregnancy doubleValue];
+            NSString *heightStr = [NSString stringWithFormat:@"%@", heightItem.height];
+            double val = [heightStr doubleValue];
+                [values6 addObject:[[ChartDataEntry alloc] initWithX:week y:val]];
+
+        }
+    }else if(whatTypeArr == 1){
+        for (CGWeight *weightItem in childmodel.weightArr) {
+            double mouth = [[self getCompareAge:childmodel.age latestDay:weightItem.time] doubleValue];
+            double week =mouth*4+[childmodel.oregnancy doubleValue];
+            NSString *weightStr = [NSString stringWithFormat:@"%@", weightItem.weight];
+            double val = [weightStr doubleValue];
+            //                [values6 addObject:[[ChartDataEntry alloc] initWithX:mouth y:val]];
+                [values6 addObject:[[ChartDataEntry alloc] initWithX:week y:val]];
+        }
+    }else if(whatTypeArr == 3){  //空
+        for (CGBMI *BMIItem in childmodel.BMIArr) {
+            double mouth = [[self getCompareAge:childmodel.age latestDay:BMIItem.time] doubleValue];
+            double week =mouth*4+[childmodel.oregnancy doubleValue];
+            NSString *BMIStr = [NSString stringWithFormat:@"%@", BMIItem.value];
+            double val = [BMIStr doubleValue];
+            //                    [values6 addObject:[[ChartDataEntry alloc] initWithX:mouth y:val]];
+                [values6 addObject:[[ChartDataEntry alloc] initWithX:week y:val]];
+        }
+    }else{
+        for (CGHeadc *headcItem in childmodel.headcArr) {
+            double mouth = [[self getCompareAge:childmodel.age latestDay:headcItem.time] doubleValue];
+            double week =mouth*4+[childmodel.oregnancy doubleValue];
+            NSString *headcStr = [NSString stringWithFormat:@"%@", headcItem.headc];
+            double val = [headcStr doubleValue];
+            //                    [values6 addObject:[[ChartDataEntry alloc] initWithX:mouth y:val]];
+                [values6 addObject:[[ChartDataEntry alloc] initWithX:week y:val]];
+
+        }
+    }
+         int b;
+         if (whatTypeArr ==1) {
+             b = 22;
+         }else{
+             b =23;
+         }
+        for (int i= b; i<50; i++) {
+            double val1 = [valArr1[i-22] doubleValue];
+            double val2 = [valArr2[i-22] doubleValue];
+            double val3 = [valArr3[i-22] doubleValue];
+            double val4 = [valArr4[i-22] doubleValue];
+            double val5 = [valArr5[i-22] doubleValue];
+            [values1 addObject:[[ChartDataEntry alloc] initWithX:i y:val1]];
+            [values2 addObject:[[ChartDataEntry alloc] initWithX:i y:val2]];
+            [values3 addObject:[[ChartDataEntry alloc] initWithX:i y:val3]];
+            [values4 addObject:[[ChartDataEntry alloc] initWithX:i y:val4]];
+            [values5 addObject:[[ChartDataEntry alloc] initWithX:i y:val5]];
+        }
+        set1 = [self setLineDataSet:values1 labeltext:@"3th" isCirclesEnabled:NO color:[UIColor blackColor]];
+        set2 = [self setLineDataSet:values2 labeltext:@"10th" isCirclesEnabled:NO color:[UIColor purpleColor]];
+        set3 = [self setLineDataSet:values3 labeltext:@"50th" isCirclesEnabled:NO color:[UIColor orangeColor]];
+        set4 = [self setLineDataSet:values4 labeltext:@"90th" isCirclesEnabled:NO color:[UIColor greenColor]];
+        set5 = [self setLineDataSet:values5 labeltext:@"97th" isCirclesEnabled:NO color:[UIColor orangeColor]];
+        set6 = [self setLineDataSet:values6 labeltext:@"儿童数据" isCirclesEnabled:YES color:[UIColor blackColor]];
+        
+        NSMutableArray *dataSets = [[NSMutableArray alloc] init];
+        [dataSets addObject:set1];
+        [dataSets addObject:set2];
+        [dataSets addObject:set3];
+        [dataSets addObject:set4];
+        [dataSets addObject:set5];
+        [dataSets addObject:set6];
+        LineChartData *data = [[LineChartData alloc] initWithDataSets:dataSets];
+        _chartView.data = data;
+        for (id<ILineChartDataSet> set in _chartView.data.dataSets)
+        {
+            set.drawFilledEnabled = NO;
+        }
+        ChartYAxis *leftAxis = _chartView.leftAxis;
+        [leftAxis removeAllLimitLines];
+        //    [leftAxis addLimitLine:ll1];
+        //    [leftAxis addLimitLine:ll2];
+        leftAxis.axisMaximum = [valArr5.lastObject floatValue];
+        leftAxis.axisMinimum = [valArr1[0] floatValue];
+        leftAxis.gridLineDashLengths = @[@5.f, @5.f];
+        leftAxis.drawZeroLineEnabled = NO;
+        leftAxis.drawLimitLinesBehindDataEnabled = YES;
+        _chartView.rightAxis.enabled = NO;
+        self.ChartsXlabel.text = @"单位/周";
+         
+         int count = valArr1.count;
+         float child_p;
+         switch (whatTypeArr) {
+             case 0:{
+                 CGHeight *lastheight= childmodel.heightArr.lastObject;
+                 NSString *lastheightStr = [NSString stringWithFormat:@"%@", lastheight.height];
+                 int mouth = [[self getCompareAge:childmodel.age latestDay:lastheight.time] intValue];
+                 int week =mouth*4+[childmodel.oregnancy doubleValue] -22;
+                 float min_p = 0;
+                 float max_p = 0;
+                 float min = 0;
+                 float max = 0;
+                 if (week >=0 && week <= count) {
+                     NSNumber *v1 = valArr1[week];
+                     NSNumber *v2 = valArr2[week];
+                     NSNumber *v3 = valArr3[week];
+                     NSNumber *v4 = valArr4[week];
+                     NSNumber *v5 = valArr5[week];
+                 
+                         if([lastheight.height compare:v1] >= 0 && [lastheight.height compare:v2] ==-1){
+                             min_p = 3;
+                             max_p = 10;
+                             min = [v1 floatValue];
+                             max = [v2 floatValue];
+                         }else if([lastheight.height compare:v2] >= 0 && [lastheight.height compare:v3] ==-1){
+                             min_p = 10;
+                             max_p = 50;
+                             min = [v2 floatValue];
+                             max = [v3 floatValue];
+                         }else if([lastheight.height compare:v3] >= 0 && [lastheight.height compare:v4] ==-1){
+                             min_p = 50;
+                             max_p = 90;
+                             min = [v3 floatValue];
+                             max = [v4 floatValue];
+                         }else if([lastheight.height compare:v4] >= 0 && [lastheight.height compare:v5] ==-1){
+                             min_p = 90;
+                             max_p = 97;
+                             min = [v4 floatValue];
+                             max = [v5 floatValue];
+                         }else if([lastheight.height compare:v5] >= 0){
+                             min_p = 97;
+                             max_p = 100;
+                             min = [v5 floatValue];
+                             max = [v5 floatValue] + 3;
+                         }else{
+                             min_p = 0;
+                             max_p = 3;
+                             min = [v1 floatValue] - 3;
+                             max = [v1 floatValue];
+                         }
+                     }
+                 
+                 
+                 child_p = ([lastheight.height floatValue] - min)*(max_p - min_p)/(max - min) +min_p;
+                 if (child_p < 0) {
+                     child_p = 0;
+                 }else if (child_p > 100){
+                     child_p = 100;
+                 }
+                 self.label.text = [NSString stringWithFormat:@"当前身高%@cm \n 超过%.1f%%的同龄儿童",lastheightStr,child_p];
+                 //            self.label1.text =[NSString stringWithFormat:@"%@发育不太理想，身高偏矮，属于中下等，请保持持续观察",childmodel.name];
+                 break;
+             }
+             case 1:{
+                 CGWeight *lastweight= childmodel.weightArr.lastObject;
+                 NSString *lastweightStr = [NSString stringWithFormat:@"%@", lastweight.weight];
+                 int mouth = [[self getCompareAge:childmodel.age latestDay:lastweight.time] intValue];
+                 int week =mouth*4+[childmodel.oregnancy doubleValue] -22;
+                 float min_p = 0;
+                 float max_p = 0;
+                 float min = 0;
+                 float max = 1;
+                     if (mouth <=121) {
+                         NSNumber *Worldv1 = valArr1[week];
+                         NSNumber *Worldv2 = valArr2[week];
+                         NSNumber *Worldv3 = valArr3[week];
+                         NSNumber *Worldv4 = valArr4[week];
+                         NSNumber *Worldv5 = valArr5[week];
+                         
+                         
+                         if([lastweight.weight compare:Worldv1] >= 0 && [lastweight.weight compare:Worldv2] ==-1){
+                             min_p = 3;
+                             max_p = 10;
+                             min = [Worldv1 floatValue];
+                             max = [Worldv2 floatValue];
+                         }else if([lastweight.weight compare:Worldv2] >= 0 && [lastweight.weight compare:Worldv3] ==-1){
+                             min_p = 10;
+                             max_p = 50;
+                             min = [Worldv2 floatValue];
+                             max = [Worldv3 floatValue];
+                         }else if([lastweight.weight compare:Worldv3] >= 0 && [lastweight.weight compare:Worldv4] ==-1){
+                             min_p = 50;
+                             max_p = 90;
+                             min = [Worldv3 floatValue];
+                             max = [Worldv4 floatValue];
+                         }else if([lastweight.weight compare:Worldv4] >= 0 && [lastweight.weight compare:Worldv5] ==-1){
+                             min_p = 90;
+                             max_p = 97;
+                             min = [Worldv4 floatValue];
+                             max = [Worldv5 floatValue];
+                         }else if([lastweight.weight compare:Worldv5] >= 0){
+                             min_p = 97;
+                             max_p = 100;
+                             min = [Worldv5 floatValue];
+                             max = [Worldv5 floatValue] + 3;
+                         }else{
+                             min_p = 0;
+                             max_p = 3;
+                             min = [Worldv1 floatValue] - 3;
+                             max = [Worldv1 floatValue];
+                         }
+                     }
+                 
+                 
+                 child_p = ([lastweight.weight floatValue] - min)*(max_p - min_p)/(max - min) +min_p;
+                 if (child_p < 0) {
+                     child_p = 0;
+                 }else if (child_p > 100){
+                     child_p = 100;
+                 }
+                 self.label.text = [NSString stringWithFormat:@"当前体重%@kg \n 超过%.1f%%的同龄儿童",lastweightStr,child_p];
+                 //            self.label1.text =[NSString stringWithFormat:@"%@的身高较高，属于中上等，发育较早，请保持持续观察",childmodel.name];
+                 break;
+             }
+             case 2:{
+                 CGHeadc *lastheadc= childmodel.headcArr.lastObject;
+                 NSString *lastheadcStr = [NSString stringWithFormat:@"%.1f",[lastheadc.headc floatValue]];
+                 int mouth = [[self getCompareAge:childmodel.age latestDay:lastheadc.time] intValue];
+                 int week =mouth*4+[childmodel.oregnancy doubleValue]-22;
+                 float min_p = 0;
+                 float max_p = 0;
+                 float min = 0;
+                 float max = 1;
+                 if (week >= count && week <= count) {
+                     NSNumber *v1 = valArr1[week];
+                     NSNumber *v2 = valArr2[week];
+                     NSNumber *v3 = valArr3[week];
+                     NSNumber *v4 = valArr4[week];
+                     NSNumber *v5 = valArr5[week];
+                 
+                         if([lastheadc.headc compare:v1] >= 0 && [lastheadc.headc compare:v2] ==-1){
+                             min_p = 3;
+                             max_p = 10;
+                             min = [v1 floatValue];
+                             max = [v2 floatValue];
+                         }else if([lastheadc.headc compare:v2] >= 0 && [lastheadc.headc compare:v3] ==-1){
+                             min_p = 10;
+                             max_p = 50;
+                             min = [v2 floatValue];
+                             max = [v3 floatValue];
+                         }else if([lastheadc.headc compare:v3] >= 0 && [lastheadc.headc compare:v4] ==-1){
+                             min_p = 50;
+                             max_p = 90;
+                             min = [v3 floatValue];
+                             max = [v4 floatValue];
+                         }else if([lastheadc.headc compare:v4] >= 0 && [lastheadc.headc compare:v5] ==-1){
+                             min_p = 90;
+                             max_p = 97;
+                             min = [v4 floatValue];
+                             max = [v5 floatValue];
+                         }else if([lastheadc.headc compare:v5] >= 0){
+                             min_p = 97;
+                             max_p = 100;
+                             min = [v5 floatValue];
+                             max = [v5 floatValue] + 3;
+                         }else{
+                             min_p = 0;
+                             max_p = 3;
+                             min = [v1 floatValue] - 3;
+                             max = [v1 floatValue];
+                         }
+                     }
+
+                 child_p = ([lastheadc.headc floatValue] - min)*(max_p - min_p)/(max - min) +min_p;
+                 if (child_p < 0) {
+                     child_p = 0;
+                 }else if (child_p > 100){
+                     child_p = 100;
+                 }
+                 self.label.text = [NSString stringWithFormat:@"当前头围%@cm \n 超过%.1f%%的同龄儿童",lastheadcStr,child_p];
+                 //            self.label1.text =[NSString stringWithFormat:@"%@的身高较高，属于中上等，发育较早，请保持持续观察",childmodel.name];
+                 break;
+             }
+                default:
+                 break;
+         }
+    }
+
+}
+//whatTypeArr :  0:height  1:weight  2:headc  3:BMI
 -(void)updateLineChart:(NSArray *)typeArr chartage:(int)chartage whatTypeArr:(int)whatTypeArr{
     
         CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
         NSString *SexStr = childmodel.sex;
-        bool childSex  = [SexStr isEqualToString:@"女"];
+        BOOL childSex  = [SexStr isEqualToString:@"女"];
     NSMutableArray *values1 = [[NSMutableArray alloc] init];
      NSMutableArray *values2 = [[NSMutableArray alloc] init];
      NSMutableArray *values3 = [[NSMutableArray alloc] init];
@@ -760,11 +1151,11 @@
 //        NSArray *valArr3 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][2];
 //        NSArray *valArr4 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][3];
 //        NSArray *valArr5 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][4];
-    NSArray *valArr1 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][0];
-    NSArray *valArr2 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][1];
-    NSArray *valArr3 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][2];
-    NSArray *valArr4 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][3];
-    NSArray *valArr5 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][4];
+    NSArray *valArr1 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][0];
+    NSArray *valArr2 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][1];
+    NSArray *valArr3 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][2];
+    NSArray *valArr4 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][3];
+    NSArray *valArr5 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][4];
 //        double val = [heightvalArr[i] doubleValue];
 //     NSMutableArray *values1 = [[NSMutableArray alloc] init];
 //        [values1 addObject:[[ChartDataEnt                                            ry alloc] initWithX:i y:val]];
@@ -824,8 +1215,8 @@
             }
 
         if (self.StandardType.selectedSegmentIndex) {   //0WHO标准|9城市标准1
-            NSArray *valArr6 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][5];
-            NSArray *valArr7 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][6];
+            NSArray *valArr6 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][5];
+            NSArray *valArr7 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][6];
             if (whatTypeArr ==3) {
                 int b,e;
                 switch (chartage) {
@@ -865,6 +1256,10 @@
                         break;
                     }
                     default:
+                    {
+                        b= 0;
+                        e= 0;
+                    }
                         break;
                 }
                 for (int i= b; i<e; i++) {
@@ -931,6 +1326,10 @@
                     break;
                 }
                 default:
+                {
+                    b=0;
+                    e=0;
+                }
                     break;
             }
                 for (int i= b; i<e; i++) {
@@ -1205,8 +1604,8 @@
         
     }else{   //Z评分
         _label2.text = @"Z评分解读：";
-        NSArray *valArr6 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][5];
-        NSArray *valArr7 = typeArr[self.StandardType.selectedSegmentIndex][self.ZorPercent.selectedSegmentIndex][chartage-1][childSex][6];
+        NSArray *valArr6 = typeArr[self.StandardType.selectedSegmentIndex !=0][self.ZorPercent.selectedSegmentIndex !=0][chartage-1][childSex][5];
+        NSArray *valArr7 = typeArr[self.StandardType.selectedSegmentIndex!=0][self.ZorPercent.selectedSegmentIndex!=0][chartage-1][childSex][6];
         if (whatTypeArr == 0) {
             for (CGHeight *heightItem in childmodel.heightArr) {
                 double mouth = [[self getCompareAge:childmodel.age latestDay:heightItem.time] doubleValue];
@@ -1891,48 +2290,48 @@
             float min = 0;
             float max = 1;
             
-            if(!self.StandardType.selectedSegmentIndex){
+            if(!self.StandardType.selectedSegmentIndex){  //世界
                 if (mouth <=121) {
-                    NSNumber *v1 = valArr1[mouth];
-                    NSNumber *v2 = valArr2[mouth];
-                    NSNumber *v3 = valArr3[mouth];
-                    NSNumber *v4 = valArr4[mouth];
-                    NSNumber *v5 = valArr5[mouth];
+                    NSNumber *Worldv1 = valArr1[mouth];
+                    NSNumber *Worldv2 = valArr2[mouth];
+                    NSNumber *Worldv3 = valArr3[mouth];
+                    NSNumber *Worldv4 = valArr4[mouth];
+                    NSNumber *Worldv5 = valArr5[mouth];
                     
             
-                if([lastweight.weight compare:v1] >= 0 && [lastweight.weight compare:v2] ==-1){
+                if([lastweight.weight compare:Worldv1] >= 0 && [lastweight.weight compare:Worldv2] ==-1){
                     min_p = 3;
                     max_p = 15;
-                    min = [v1 floatValue];
-                    max = [v2 floatValue];
-                }else if([lastweight.weight compare:v2] >= 0 && [lastweight.weight compare:v3] ==-1){
+                    min = [Worldv1 floatValue];
+                    max = [Worldv2 floatValue];
+                }else if([lastweight.weight compare:Worldv2] >= 0 && [lastweight.weight compare:Worldv3] ==-1){
                     min_p = 15;
                     max_p = 50;
-                    min = [v2 floatValue];
-                    max = [v3 floatValue];
-                }else if([lastweight.weight compare:v3] >= 0 && [lastweight.weight compare:v4] ==-1){
+                    min = [Worldv2 floatValue];
+                    max = [Worldv3 floatValue];
+                }else if([lastweight.weight compare:Worldv3] >= 0 && [lastweight.weight compare:Worldv4] ==-1){
                     min_p = 50;
                     max_p = 85;
-                    min = [v3 floatValue];
-                    max = [v4 floatValue];
-                }else if([lastweight.weight compare:v4] >= 0 && [lastweight.weight compare:v5] ==-1){
+                    min = [Worldv3 floatValue];
+                    max = [Worldv4 floatValue];
+                }else if([lastweight.weight compare:Worldv4] >= 0 && [lastweight.weight compare:Worldv5] ==-1){
                     min_p = 85;
                     max_p = 97;
-                    min = [v4 floatValue];
-                    max = [v5 floatValue];
-                }else if([lastweight.weight compare:v5] >= 0){
+                    min = [Worldv4 floatValue];
+                    max = [Worldv5 floatValue];
+                }else if([lastweight.weight compare:Worldv5] >= 0){
                     min_p = 97;
                     max_p = 100;
-                    min = [v5 floatValue];
-                    max = [v5 floatValue] + 3;
+                    min = [Worldv5 floatValue];
+                    max = [Worldv5 floatValue] + 3;
                 }else{
                     min_p = 0;
                     max_p = 3;
-                    min = [v1 floatValue] - 3;
-                    max = [v1 floatValue];
+                    min = [Worldv1 floatValue] - 3;
+                    max = [Worldv1 floatValue];
                 }
             }
-            }else{
+            }else{   //中国
                 int mouthArr = [self chinaMouthToArr:mouth];
                 NSNumber *v1 = valArr1[mouthArr];
                 NSNumber *v2 = valArr2[mouthArr];
@@ -2057,7 +2456,7 @@
         case 3:{
             CGBMI *lastBMI= childmodel.BMIArr.lastObject;
             NSString *lastBMIStr = [NSString stringWithFormat:@"%@", lastBMI.value];
-            int mouth = [[self getCompareAge:childmodel.age latestDay:lastBMI.time] intValue];
+            int mouth = [[self getCompareAge:childmodel.age latestDay:lastBMI.time] intValue]/2;
             
             NSNumber *v1 = valArr1[mouth];
             NSNumber *v2 = valArr2[mouth];
@@ -2186,11 +2585,13 @@
         self.label1.frame = CGRectMake(10,CGRectGetMaxY(self.pimage.frame)+20, self.view.bounds.size.width-20,lab1Height);
         self.pimage.percent = child_p;
         if (!self.StandardType.selectedSegmentIndex) {
-            self.label3.text = @"本次评测百分位数据参照\n 《世界卫生组织儿童生长发育标准（2006年版）》";
+            self.label3.text = @"本次评测百分位数据参照\n 《世界卫生组织儿童生长发育标准（2009年版）》";
         }else{
             self.label3.text = @"本次评测百分位数据参照\n 《中国0-18岁青少年身高、体重、BMI的生长曲线（2009）》";
         }
         [self.scrollView addSubview:self.label3];
+        
+        self.scrollView.contentSize =CGSizeMake(screenWidth, CGRectGetMaxY(self.label3.frame));
     }else{
         self.label1.font = [UIFont fontWithName:@"Arial" size:14.0f];
     self.label1.text =[NSString stringWithFormat:@"%@",self.percentUnscramble[4]];
@@ -2198,11 +2599,15 @@
     CGFloat lab1Height = [self getHeightByWidth:self.view.bounds.size.width-20 title:self.label1.text font:self.label1.font];
     self.label1.frame = CGRectMake(10,CGRectGetMaxY(self.label2.frame)+10, self.view.bounds.size.width-20,lab1Height);
         [self.label3 removeFromSuperview];
+        [self.scrollView addSubview:self.label1];
+        self.scrollView.contentSize =CGSizeMake(screenWidth, CGRectGetMaxY(self.label1.frame));
        	
     }
+    self.ChartsXlabel.text = @"单位/月";
     
     
-    [self.scrollView addSubview:self.label1];
+    
+    
 
 }
 -(int)chinaMouthToArr:(int)mouth{
@@ -2267,6 +2672,7 @@
 - (IBAction)StandardTypeChange:(id)sender {
     [self.ChartType setEnabled:YES forSegmentAtIndex:2];
     [self.ChartType setEnabled:YES forSegmentAtIndex:3];
+    [self.ZorPercent setEnabled:YES forSegmentAtIndex:0];
     if (self.StandardType.selectedSegmentIndex) {    //中国
         [self.ChartType setEnabled:NO forSegmentAtIndex:2];
         if (!self.ZorPercent.selectedSegmentIndex) {
@@ -2285,6 +2691,9 @@
         if (!self.ZorPercent.selectedSegmentIndex) {
             [self.ChartType setEnabled:NO forSegmentAtIndex:3];
         }
+    }else if(self.ChartType.selectedSegmentIndex ==3){
+    [self.ZorPercent setEnabled:NO forSegmentAtIndex:0];
+        [self.StandardType setEnabled:YES forSegmentAtIndex:1];
     }
     [self reloadall];
 }
@@ -2311,7 +2720,7 @@
             self.InputBtn.enabled = NO;
             [self.InputBtn setTitle:@"不需输入" forState:UIControlStateNormal];
             if (self.StandardType.selectedSegmentIndex) {
-                [self.ZorPercent setEnabled:NO forSegmentAtIndex:1];
+                [self.ZorPercent setEnabled:NO forSegmentAtIndex:0];
             }
             if (!self.ZorPercent.selectedSegmentIndex) {
                 [self.StandardType setEnabled:NO forSegmentAtIndex:1];
@@ -2339,7 +2748,7 @@
     
 }
 //whattype    0:height   1`:weight   2:headc
--(void)isEarlythanbirthorOverrange:(NSString *)time birthday:(NSString *)birthtime whattype:(int)whattype value:(NSNumber *)value{
+-(BOOL)isEarlythanbirthorOverrange:(NSString *)time birthday:(NSString *)birthtime whattype:(int)whattype value:(NSNumber *)value{
     int mouth =[[self getCompareAge:birthtime latestDay:time] intValue];
     if(mouth <0){
     //初始化提示框
@@ -2350,6 +2759,7 @@
     }]];
     //弹出提示框
     [self presentModalViewController:alert animated:true];
+    return YES;
     }else{
 
         switch (whattype) {
@@ -2363,13 +2773,15 @@
                     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIPreviewActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         
                     }]];
+                    
                     //弹出提示框
                     [self presentModalViewController:alert animated:true];
+                    return YES;
                 }
                 break;
             }
             case 1:{
-                
+                return NO;
                 break;
             }
             case 2:{
@@ -2380,14 +2792,18 @@
                     [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIPreviewActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         
                     }]];
+                    
                     //弹出提示框
                     [self presentModalViewController:alert animated:true];
+                    return YES;
                 }
                 break;
             }
             default:
+                return NO;
                 break;
         }
+        return NO;
     }
 }
 // type--- 0:height  1:weight  2:headc  3:BMI
@@ -2426,7 +2842,7 @@
                              @"importTime" : newImporttime,
                              @"token" : self.token
                              };
-    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:@"http://121.40.89.113/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
 //        dispatch_semaphore_signal(semaphore);
         NSLog(@"请求成功---%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -2488,7 +2904,7 @@
                              @"token" : self.token,
                              @"childBirthdate":newBirthdate
                              };
-    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataAdd" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:@"http://121.40.89.113/childGrow/Mobile/dataAdd" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"请求成功---%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败---%@", error);
@@ -2524,7 +2940,7 @@
                              @"importTime" : newImporttime,
                              @"token" : self.token
                              };
-    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataDelete" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:@"http://121.40.89.113/childGrow/Mobile/dataDelete" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"请求成功---%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败---%@", error);
@@ -2647,117 +3063,120 @@
     CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
     //输入时间判定（1，不能重复 。 2，不能早于出生）
     //不能早于出生
-    [self isEarlythanbirthorOverrange:heightItem.time birthday:childmodel.age whattype:0 value:heightItem.height];
-    //自动移除重复的
-    int same =0;
-    for (CGHeight *height in childmodel.heightArr) {
-        if([heightItem.time isEqualToString:height.time]){
-            [childmodel.heightArr removeObject:height];
-            same = 1;
-                 // post修改
-                [self postEditData:heightItem.height importtime:heightItem.time type:0 childId:childmodel.ChildId];
-        }
-    }
-    //添加到数据数组
-    
-    if (childmodel.heightArr ==nil) {
-        childmodel.heightArr = [[NSMutableArray alloc]init];
-    }
-        [childmodel.heightArr addObject:heightItem];
-    //判断是否有同一天的任何数据
-    if (!same) {
-        if ([self hasSameimportTimeData:heightItem.time childModel:childmodel type:0]) {
-            
+  BOOL isEar=  [self isEarlythanbirthorOverrange:heightItem.time birthday:childmodel.age whattype:0 value:heightItem.height];
+    if (!isEar) {
+        //自动移除重复的
+        int same =0;
+        for (CGHeight *height in childmodel.heightArr) {
+            if([heightItem.time isEqualToString:height.time]){
+                [childmodel.heightArr removeObject:height];
+                same = 1;
                 // post修改
                 [self postEditData:heightItem.height importtime:heightItem.time type:0 childId:childmodel.ChildId];
-
+            }
         }
-        else{
-
+        //添加到数据数组
+        
+        if (childmodel.heightArr ==nil) {
+            childmodel.heightArr = [[NSMutableArray alloc]init];
+        }
+        [childmodel.heightArr addObject:heightItem];
+        //判断是否有同一天的任何数据
+        if (!same) {
+            if ([self hasSameimportTimeData:heightItem.time childModel:childmodel type:0]) {
+                
+                // post修改
+                [self postEditData:heightItem.height importtime:heightItem.time type:0 childId:childmodel.ChildId];
+                
+            }
+            else{
+                
                 // post上传
                 [self postdata:heightItem.height importtime:heightItem.time type:0 childId:childmodel.ChildId BirthDate:childmodel.age];
-
-        }
-    }
-    //判断 身高体重若有相同日期。计算BMI
-    for (CGHeight *height in childmodel.heightArr) {
-        for (CGWeight *weight in childmodel.weightArr) {
-            if([heightItem.time isEqualToString:height.time] && [heightItem.time isEqualToString:weight.time]){
-                for (CGBMI *bmi in childmodel.BMIArr) {
-                    if([bmi.time isEqualToString:heightItem.time]){
-                        [childmodel.BMIArr removeObject:bmi];
-                    }
-                }
-                CGBMI * bmi = [[CGBMI alloc]init];
-                bmi.time = weight.time;
-                float m= [height.height floatValue] *0.01;
-                float bvalue = [weight.weight floatValue] /pow(m, 2);
-                bmi.value = [NSNumber numberWithFloat:bvalue];
-                if (childmodel.BMIArr ==nil) {
-                    
-                    childmodel.BMIArr = [[NSMutableArray alloc]init];
-                }
-                [childmodel.BMIArr addObject:bmi];
-//                dispatch_async(queue, ^{
-//                    //post修改bmi
-//                    [self postEditData:bmi.value importtime:bmi.time type:3 childId:childmodel.ChildId];
-//                });
-                dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-//                NSString *token = [self readNSUserDefaultstoken];
-                NSString *parm =@"bmi";
-//                NSNumber *childID = [NSNumber numberWithInteger:childmodel.ChildId];
-                //    NSString *userAccount = @"123456";
-                dispatch_group_async(group, queue, ^{
-                    // 1.创建AFN管理者
-                    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                    NSString *importTime = [self dataStringfromDataString:bmi.time];
-                    // 2.利用AFN管理者发送请求
-                    NSDictionary *params = @{
-                                             @"parm" : parm,
-                                             @"data" : bmi.value,
-                                             @"childID" : childmodel.ChildId,
-                                             @"importTime" : importTime,
-                                             @"token" : self.token
-                                             };
-                    [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                        dispatch_semaphore_signal(semaphore);
-                        NSLog(@"请求成功---%@", responseObject);
-                    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                        NSLog(@"请求失败---%@", error);
-                    }];
-                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                });
-                break;
                 
             }
         }
+        //判断 身高体重若有相同日期。计算BMI
+        for (CGHeight *height in childmodel.heightArr) {
+            for (CGWeight *weight in childmodel.weightArr) {
+                if([heightItem.time isEqualToString:height.time] && [heightItem.time isEqualToString:weight.time]){
+                    for (CGBMI *bmi in childmodel.BMIArr) {
+                        if([bmi.time isEqualToString:heightItem.time]){
+                            [childmodel.BMIArr removeObject:bmi];
+                        }
+                    }
+                    CGBMI * bmi = [[CGBMI alloc]init];
+                    bmi.time = weight.time;
+                    float m= [height.height floatValue] *0.01;
+                    float bvalue = [weight.weight floatValue] /pow(m, 2);
+                    bmi.value = [NSNumber numberWithFloat:bvalue];
+                    if (childmodel.BMIArr ==nil) {
+                        
+                        childmodel.BMIArr = [[NSMutableArray alloc]init];
+                    }
+                    [childmodel.BMIArr addObject:bmi];
+                    //                dispatch_async(queue, ^{
+                    //                    //post修改bmi
+                    //                    [self postEditData:bmi.value importtime:bmi.time type:3 childId:childmodel.ChildId];
+                    //                });
+                    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                    //                NSString *token = [self readNSUserDefaultstoken];
+                    NSString *parm =@"bmi";
+                    //                NSNumber *childID = [NSNumber numberWithInteger:childmodel.ChildId];
+                    //    NSString *userAccount = @"123456";
+                    dispatch_group_async(group, queue, ^{
+                        // 1.创建AFN管理者
+                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+                        NSString *importTime = [self dataStringfromDataString:bmi.time];
+                        // 2.利用AFN管理者发送请求
+                        NSDictionary *params = @{
+                                                 @"parm" : parm,
+                                                 @"data" : bmi.value,
+                                                 @"childID" : childmodel.ChildId,
+                                                 @"importTime" : importTime,
+                                                 @"token" : self.token
+                                                 };
+                        [manager POST:@"http://121.40.89.113/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                            dispatch_semaphore_signal(semaphore);
+                            NSLog(@"请求成功---%@", responseObject);
+                        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                            NSLog(@"请求失败---%@", error);
+                        }];
+                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                    });
+                    break;
+                    
+                }
+            }
+        }
+        //保存
+        self.childs[[self.childindex integerValue]] =childmodel;
+        
+        [self writeAllChildInfortoPlist];
+        //刷新图表
+        [self reloadall];
+        //    //初始化提示框
+        //    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"该日期已有记录，是否覆盖原记录" preferredStyle:UIAlertControllerStyleAlert];
+        //    //    UIPreviewActionStyleDefault=0 UIPreviewActionStyleSelected,UIPreviewActionStyleDestructive,
+        //    [alert addAction:[UIAlertAction actionWithTitle:@"覆盖" style:UIPreviewActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //        [childmodel.heightArr addObject:heightItem];
+        //        self.childs[[self.childindex integerValue]] =childmodel;
+        //        
+        //        [self writeAllChildInfortoPlist];
+        //        //刷新图表
+        //        [self reloadall];
+        //        
+        //    }]];
+        //    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIPreviewActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        //        
+        //    }]];
+        //    //弹出提示框
+        //    [self presentModalViewController:alert animated:true];
+        
+        
+        //    NSLog(@"111111--111111");
     }
-            //保存
-            self.childs[[self.childindex integerValue]] =childmodel;
     
-            [self writeAllChildInfortoPlist];
-            //刷新图表
-            [self reloadall];
-//    //初始化提示框
-//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"该日期已有记录，是否覆盖原记录" preferredStyle:UIAlertControllerStyleAlert];
-//    //    UIPreviewActionStyleDefault=0 UIPreviewActionStyleSelected,UIPreviewActionStyleDestructive,
-//    [alert addAction:[UIAlertAction actionWithTitle:@"覆盖" style:UIPreviewActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        [childmodel.heightArr addObject:heightItem];
-//        self.childs[[self.childindex integerValue]] =childmodel;
-//        
-//        [self writeAllChildInfortoPlist];
-//        //刷新图表
-//        [self reloadall];
-//        
-//    }]];
-//    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIPreviewActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        
-//    }]];
-//    //弹出提示框
-//    [self presentModalViewController:alert animated:true];
-
-    
-    //    NSLog(@"111111--111111");
 }
 -(void)addinforVC:(AddViewController *)addinforVC weightItem:(CGWeight *)weightItem{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -2768,147 +3187,149 @@
     CGChildModel *childmodel = self.childs[[self.childindex integerValue]];
     //输入时间判定（1，不能重复 。 2，不能早于出生）
     //不能早于出生
-    [self isEarlythanbirthorOverrange:weightItem.time birthday:childmodel.age whattype:1 value:weightItem.weight];
-    
-    int same = 0;
-    //自动移除重复的
-    for (CGWeight *weight in childmodel.weightArr) {
-        if([weightItem.time isEqualToString:weight.time]){
-            [childmodel.weightArr removeObject:weight];
-            same = 1;
+  BOOL isEar =  [self isEarlythanbirthorOverrange:weightItem.time birthday:childmodel.age whattype:1 value:weightItem.weight];
+    if (!isEar) {
+        int same = 0;
+        //自动移除重复的
+        for (CGWeight *weight in childmodel.weightArr) {
+            if([weightItem.time isEqualToString:weight.time]){
+                [childmodel.weightArr removeObject:weight];
+                same = 1;
                 // post修改
                 [self postEditData:weightItem.weight importtime:weightItem.time type:1 childId:childmodel.ChildId];
-//            NSString *token = [self readNSUserDefaultstoken];
-//            NSString *parm =@"weight";
-//             NSString *childId = @"88888888";
-//            //    NSString *userAccount = @"123456";
-//            NSString *importTime = [self dataStringfromDataString:weightItem.time];
-//            // 1.创建AFN管理者
-//            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//            
-//            // 2.利用AFN管理者发送请求
-//            NSDictionary *params = @{
-//                                     @"parm" : parm,
-//                                     @"data" : weightItem.weight,
-//                                     @"childID" : childId,
-//                                     @"importTime" : importTime,
-//                                     @"token" : token
-//                                     };
-//            [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//               
-//                NSLog(@"请求成功---%@", responseObject);
-//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//                NSLog(@"请求失败---%@", error);
-//            }];
-            
-            
+                //            NSString *token = [self readNSUserDefaultstoken];
+                //            NSString *parm =@"weight";
+                //             NSString *childId = @"88888888";
+                //            //    NSString *userAccount = @"123456";
+                //            NSString *importTime = [self dataStringfromDataString:weightItem.time];
+                //            // 1.创建AFN管理者
+                //            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+                //
+                //            // 2.利用AFN管理者发送请求
+                //            NSDictionary *params = @{
+                //                                     @"parm" : parm,
+                //                                     @"data" : weightItem.weight,
+                //                                     @"childID" : childId,
+                //                                     @"importTime" : importTime,
+                //                                     @"token" : token
+                //                                     };
+                //            [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                //
+                //                NSLog(@"请求成功---%@", responseObject);
+                //            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                //                NSLog(@"请求失败---%@", error);
+                //            }];
+                
+                
+            }
         }
-    }
-    if (childmodel.weightArr ==nil) {
-        childmodel.weightArr =[[NSMutableArray alloc]init];
-    }
-    [childmodel.weightArr addObject:weightItem];
-    //判断是否有同一天的任何数据
-    if (!same) {
-        if ([self hasSameimportTimeData:weightItem.time childModel:childmodel type:1]) {
-
+        if (childmodel.weightArr ==nil) {
+            childmodel.weightArr =[[NSMutableArray alloc]init];
+        }
+        [childmodel.weightArr addObject:weightItem];
+        //判断是否有同一天的任何数据
+        if (!same) {
+            if ([self hasSameimportTimeData:weightItem.time childModel:childmodel type:1]) {
+                
                 // post修改
-    [self postEditData:weightItem.weight importtime:weightItem.time type:1 childId:childmodel.ChildId];
-
-//            NSString *token = [self readNSUserDefaultstoken];
-//            NSString *parm =@"weight";
-//            NSString *childId = @"88888888";
-//            //    NSString *userAccount = @"123456";
-//            // 1.创建AFN管理者
-//            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//            
-//            // 2.利用AFN管理者发送请求
-//            NSDictionary *params = @{
-//                                     @"parm" : parm,
-//                                     @"data" : weightItem.weight,
-//                                     @"childID" : childId,
-//                                     @"importTime" : weightItem.time,
-//                                     @"token" : token
-//                                     };
-//            [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//                
-//                NSLog(@"请求成功---%@", responseObject);
-//            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//                NSLog(@"请求失败---%@", error);
-//            }];
-            
-        }
-        else{
-//            dispatch_async(queue, ^{
+                [self postEditData:weightItem.weight importtime:weightItem.time type:1 childId:childmodel.ChildId];
+                
+                //            NSString *token = [self readNSUserDefaultstoken];
+                //            NSString *parm =@"weight";
+                //            NSString *childId = @"88888888";
+                //            //    NSString *userAccount = @"123456";
+                //            // 1.创建AFN管理者
+                //            AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+                //
+                //            // 2.利用AFN管理者发送请求
+                //            NSDictionary *params = @{
+                //                                     @"parm" : parm,
+                //                                     @"data" : weightItem.weight,
+                //                                     @"childID" : childId,
+                //                                     @"importTime" : weightItem.time,
+                //                                     @"token" : token
+                //                                     };
+                //            [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                //
+                //                NSLog(@"请求成功---%@", responseObject);
+                //            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                //                NSLog(@"请求失败---%@", error);
+                //            }];
+                
+            }
+            else{
+                //            dispatch_async(queue, ^{
                 // post上传
                 [self postdata:weightItem.weight importtime:weightItem.time type:1 childId:childmodel.ChildId BirthDate:childmodel.age];
-//            });
-        }
-    }
-        
-    //判断 身高体重若有相同日期。计算BMI
-    for (CGHeight *height in childmodel.heightArr) {
-        for (CGWeight *weight in childmodel.weightArr) {
-            if([weightItem.time isEqualToString:height.time] && [weightItem.time isEqualToString:weight.time]){
-                for (CGBMI *bmi in childmodel.BMIArr) {
-                    if([bmi.time isEqualToString:weightItem.time]){
-                        [childmodel.BMIArr removeObject:bmi];
-                    }
-                }
-                CGBMI * bmi = [[CGBMI alloc]init];
-                bmi.time = weight.time;
-                float m= [height.height floatValue] *0.01;
-                float bvalue = [weight.weight floatValue] /(m*m);
-                bmi.value = [NSNumber numberWithFloat:bvalue];
-                if (childmodel.BMIArr ==nil) {
-                    
-                    childmodel.BMIArr = [[NSMutableArray alloc]init];
-                }
-                [childmodel.BMIArr addObject:bmi];
-//                dispatch_async(queue, ^{
-                    //post修改bmi
-//                    [self postEditData:bmi.value importtime:bmi.time type:3];
-//                });
-                
-                
-//                NSString *token = [self readNSUserDefaultstoken];
-                NSString *parm =@"bmi";
-//                NSNumber *childID = [NSNumber numberWithInteger:childmodel.ChildId];
-                //    NSString *userAccount = @"123456";
-               dispatch_group_async(group, queue, ^{
-                   dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-                // 1.创建AFN管理者
-                AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-                   NSString *importTime = [self dataStringfromDataString:bmi.time];
-                // 2.利用AFN管理者发送请求
-                NSDictionary *params = @{
-                                         @"parm" : parm,
-                                         @"data" : bmi.value,
-                                         @"childID" : childmodel.ChildId,
-                                         @"importTime" : importTime,
-                                         @"token" : self.token
-                                         };
-                [manager POST:@"http://192.168.1.121/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                    dispatch_semaphore_signal(semaphore);
-                    NSLog(@"请求成功---%@", responseObject);
-                } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                    NSLog(@"请求失败---%@", error);
-                }];
-                dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-               });
-                break;
+                //            });
             }
-           
         }
+        
+        //判断 身高体重若有相同日期。计算BMI
+        for (CGHeight *height in childmodel.heightArr) {
+            for (CGWeight *weight in childmodel.weightArr) {
+                if([weightItem.time isEqualToString:height.time] && [weightItem.time isEqualToString:weight.time]){
+                    for (CGBMI *bmi in childmodel.BMIArr) {
+                        if([bmi.time isEqualToString:weightItem.time]){
+                            [childmodel.BMIArr removeObject:bmi];
+                        }
+                    }
+                    CGBMI * bmi = [[CGBMI alloc]init];
+                    bmi.time = weight.time;
+                    float m= [height.height floatValue] *0.01;
+                    float bvalue = [weight.weight floatValue] /(m*m);
+                    bmi.value = [NSNumber numberWithFloat:bvalue];
+                    if (childmodel.BMIArr ==nil) {
+                        
+                        childmodel.BMIArr = [[NSMutableArray alloc]init];
+                    }
+                    [childmodel.BMIArr addObject:bmi];
+                    //                dispatch_async(queue, ^{
+                    //post修改bmi
+                    //                    [self postEditData:bmi.value importtime:bmi.time type:3];
+                    //                });
+                    
+                    
+                    //                NSString *token = [self readNSUserDefaultstoken];
+                    NSString *parm =@"bmi";
+                    //                NSNumber *childID = [NSNumber numberWithInteger:childmodel.ChildId];
+                    //    NSString *userAccount = @"123456";
+                    dispatch_group_async(group, queue, ^{
+                        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                        // 1.创建AFN管理者
+                        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+                        NSString *importTime = [self dataStringfromDataString:bmi.time];
+                        // 2.利用AFN管理者发送请求
+                        NSDictionary *params = @{
+                                                 @"parm" : parm,
+                                                 @"data" : bmi.value,
+                                                 @"childID" : childmodel.ChildId,
+                                                 @"importTime" : importTime,
+                                                 @"token" : self.token
+                                                 };
+                        [manager POST:@"http://121.40.89.113/childGrow/Mobile/dataEdit" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                            dispatch_semaphore_signal(semaphore);
+                            NSLog(@"请求成功---%@", responseObject);
+                        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                            NSLog(@"请求失败---%@", error);
+                        }];
+                        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                    });
+                    break;
+                }
+                
+            }
+        }
+        
+        //保存
+        self.childs[[self.childindex integerValue]] =childmodel;
+        
+        [self writeAllChildInfortoPlist];
+        //刷新图表
+        [self reloadall];
+        //    NSLog(@"2222222--22222222");
     }
-
-    //保存
-    self.childs[[self.childindex integerValue]] =childmodel;
     
-    [self writeAllChildInfortoPlist];
-    //刷新图表
-    [self reloadall];
-    //    NSLog(@"2222222--22222222");
 }
 -(void)addinforVC:(AddViewController *)addinforVC headcItem:(CGHeadc *)headcItem{
     dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
@@ -2917,44 +3338,46 @@
     //输入时间判定（1，不能重复 。 2，不能早于出生）
     //不能早于出生
 //    [self isEarlythanbirth:headcItem.time birthday:childmodel.age];
-    [self isEarlythanbirthorOverrange:headcItem.time birthday:childmodel.age whattype:2 value:headcItem.headc];
-    //自动移除重复的
-    int same = 0;
-    for (CGHeadc *headc in childmodel.weightArr) {
-        if([headcItem.time isEqualToString:headc.time]){
-            [childmodel.headcArr removeObject:headc];
-            same = 1;
-            dispatch_async(queue, ^{
-                // post修改
-                [self postEditData:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId];
-            });
+   BOOL isEar = [self isEarlythanbirthorOverrange:headcItem.time birthday:childmodel.age whattype:2 value:headcItem.headc];
+    if (!isEar) {
+        //自动移除重复的
+        int same = 0;
+        for (CGHeadc *headc in childmodel.weightArr) {
+            if([headcItem.time isEqualToString:headc.time]){
+                [childmodel.headcArr removeObject:headc];
+                same = 1;
+                dispatch_async(queue, ^{
+                    // post修改
+                    [self postEditData:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId];
+                });
+            }
         }
-    }
-    if (childmodel.headcArr ==nil) {
-        childmodel.headcArr = [[NSMutableArray alloc]init];
-    }
-    [childmodel.headcArr addObject:headcItem];
-    //判断是否有同一天的任何数据
-    if (!same) {
-        if ([self hasSameimportTimeData:headcItem.time childModel:childmodel type:2]) {
-            dispatch_async(queue, ^{
-                // post修改
-                [self postEditData:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId];
-            });
+        if (childmodel.headcArr ==nil) {
+            childmodel.headcArr = [[NSMutableArray alloc]init];
         }
-        else{
-            dispatch_async(queue, ^{
-                // post上传
-                [self postdata:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId BirthDate:childmodel.age];
-            });
+        [childmodel.headcArr addObject:headcItem];
+        //判断是否有同一天的任何数据
+        if (!same) {
+            if ([self hasSameimportTimeData:headcItem.time childModel:childmodel type:2]) {
+                dispatch_async(queue, ^{
+                    // post修改
+                    [self postEditData:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId];
+                });
+            }
+            else{
+                dispatch_async(queue, ^{
+                    // post上传
+                    [self postdata:headcItem.headc importtime:headcItem.time type:2 childId:childmodel.ChildId BirthDate:childmodel.age];
+                });
+            }
         }
+        self.childs[[self.childindex integerValue]] =childmodel;
+        
+        [self writeAllChildInfortoPlist];
+        //刷新图表
+        [self reloadall];
+        //    NSLog(@"333333333--33333333");
     }
-    self.childs[[self.childindex integerValue]] =childmodel;
-    
-    [self writeAllChildInfortoPlist];
-    //刷新图表
-    [self reloadall];
-    //    NSLog(@"333333333--33333333");
 }
 -(void)deleteforVC:(DeleteTableViewController *)deleteforVC childItem:(CGChildModel *)childItem deleteItem:(NSMutableArray *)deleteitem{
     //保存存放的数据(修改模型)

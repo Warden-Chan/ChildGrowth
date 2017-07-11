@@ -70,7 +70,7 @@
         }];
         /*背景气泡*/
 //        CGRect frame = CGRectMake(125, 10, 205, 150);
-        CGRect frame = CGRectMake(125, 10, self.frame.size.width-60, 150);
+        CGRect frame = CGRectMake(140, 10, screenWidth-120, 150);
         UIImageView *image = [[UIImageView alloc] initWithFrame:frame];
         
         CAShapeLayer *layer = [CAShapeLayer layer];
@@ -102,17 +102,20 @@
 //        }];
         
         /** 身高 */
+//        CGRect heightLabelFrame = CGRectMake(image.frame.origin.x +20, image.frame.origin.y, 70, 50);
+       CGFloat heightLabx = (screenWidth - image.frame.origin.x)*0.5-70;
         UILabel *heightLabel = [[UILabel alloc] init];
 //        heightLabel.textColor = [UIColor orangeColor];
 //        heightLabel.textAlignment = NSTextAlignmentCenter;
         heightLabel.font = WDfont;
         heightLabel.numberOfLines=0;
+        heightLabel.textAlignment = 1;
         [self.contentView addSubview:heightLabel];
         self.heightLabel = heightLabel;
         [heightLabel makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.contentView).offset(spcae*2);
 //            make.top.equalTo(iconButtonView.centerY);
-            make.left.equalTo(iconButtonView.right).offset(spcae*3);
+            make.left.equalTo(image.left).offset(heightLabx+20);
 //            make.bottom.equalTo(iconButtonView.bottom);
             make.size.equalTo(CGSizeMake(70, 50));
         }];
@@ -123,6 +126,7 @@
 //        weightLabel.textColor = [UIColor orangeColor];
         weightLabel.font = WDfont;
         weightLabel.numberOfLines=0;
+        weightLabel.textAlignment = 1;
         [self.contentView addSubview:weightLabel];
         self.weightLabel = weightLabel;
         [weightLabel makeConstraints:^(MASConstraintMaker *make) {
@@ -140,7 +144,7 @@
 //        BMILabel.textColor = [UIColor orangeColor]; //lightGrayColor
         BMILabel.font = WDfont;
         BMILabel.numberOfLines = 0;
-        BMILabel.textAlignment = 0;
+        BMILabel.textAlignment = 1;
         [self.contentView addSubview:BMILabel];
         self.BMILabel = BMILabel;
         [BMILabel makeConstraints:^(MASConstraintMaker *make) {
@@ -154,13 +158,13 @@
 //        timeLabel.textAlignment = NSTextAlignmentRight;
         timeLabel.font = [UIFont systemFontOfSize:17];
         timeLabel.numberOfLines = 0;
-        timeLabel.textAlignment = 0;
+        timeLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:timeLabel];
         self.timeLabel = timeLabel;
         [timeLabel makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(heightLabel.bottom).offset(spcae);
             //            make.bottom.equalTo(iconButtonView.bottom);
-            make.left.equalTo(weightLabel.left);
+            make.left.equalTo(weightLabel.left).offset(-7);
             make.size.equalTo(CGSizeMake(80, 50));
         }];
     }
@@ -200,8 +204,11 @@
     NSString *imgname = [NSString stringWithFormat:@"%@.png",childmodel.icon ];
     NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"]stringByAppendingPathComponent:imgname];
     UIImage *savedImage = [[UIImage alloc]initWithContentsOfFile:fullPath];
-    if (![imgname isEqualToString:@""]) {
+    if (![imgname isEqualToString:@".png"]) {
         [self.iconButtonView setImage:savedImage forState:UIControlStateNormal];
+    }else{
+        UIImage *initImage = [UIImage imageNamed:@"小孩3"];
+        [self.iconButtonView setImage:initImage forState:UIControlStateNormal];
     }
     CGHeight *heightItem= childmodel.heightArr.lastObject;
     CGWeight *weightItem= childmodel.weightArr.lastObject;

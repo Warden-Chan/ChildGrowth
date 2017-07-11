@@ -158,7 +158,7 @@ NSString * const childAddindentifier = @"childAddCell";
                              @"childID" : childId,
                              @"token" : self.token
                              };
-    [manager POST:@"http://192.168.1.121/childGrow/Mobile/deleteChildID" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [manager POST:@"http://121.40.89.113/childGrow/Mobile/deleteChildID" parameters:params progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSLog(@"请求成功---%@", responseObject);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"请求失败---%@", error);

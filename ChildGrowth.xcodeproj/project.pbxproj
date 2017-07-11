@@ -28,6 +28,9 @@
 		762CC27D1DDAFC6C001E70E6 /* View2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 762CC27C1DDAFC6C001E70E6 /* View2.xib */; };
 		762CC2831DDB2379001E70E6 /* View2TableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 762CC2821DDB2379001E70E6 /* View2TableViewCell.m */; };
 		762CC2861DDB2D2A001E70E6 /* View2UIButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 762CC2851DDB2D2A001E70E6 /* View2UIButton.m */; };
+		763E32681EFBA1AE00315BB3 /* hospital.plist in Resources */ = {isa = PBXBuildFile; fileRef = 763E32671EFBA1AE00315BB3 /* hospital.plist */; };
+		763E326E1EFBAA4600315BB3 /* CGCity.m in Sources */ = {isa = PBXBuildFile; fileRef = 763E326D1EFBAA4600315BB3 /* CGCity.m */; };
+		763E32741EFBAAF000315BB3 /* CGHospital.m in Sources */ = {isa = PBXBuildFile; fileRef = 763E32731EFBAAF000315BB3 /* CGHospital.m */; };
 		76483B851E23365600887B00 /* headc.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76483B841E23365600887B00 /* headc.plist */; };
 		76483BA11E236EC200887B00 /* test.plist in Resources */ = {isa = PBXBuildFile; fileRef = 76483BA01E236EC200887B00 /* test.plist */; };
 		764908F81DDC0694003A57F2 /* CGHome.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 764908F71DDC0694003A57F2 /* CGHome.storyboard */; };
@@ -157,6 +160,7 @@
 		767505081E79114600FF2029 /* percentImage.xib in Resources */ = {isa = PBXBuildFile; fileRef = 767505071E79114600FF2029 /* percentImage.xib */; };
 		767505121E79173400FF2029 /* percentImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 767505111E79173400FF2029 /* percentImageView.m */; };
 		767505161E797BDE00FF2029 /* listCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 767505151E797BDE00FF2029 /* listCellItem.m */; };
+		7678E6F21ECECA28005083D3 /* Earlydata.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7678E6F11ECECA28005083D3 /* Earlydata.plist */; };
 		767AB76C1DD01C9900B3DA28 /* MASCompositeConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 767AB7531DD01C9900B3DA28 /* MASCompositeConstraint.m */; };
 		767AB76D1DD01C9900B3DA28 /* MASConstraint.m in Sources */ = {isa = PBXBuildFile; fileRef = 767AB7561DD01C9900B3DA28 /* MASConstraint.m */; };
 		767AB76E1DD01C9900B3DA28 /* MASConstraintMaker.m in Sources */ = {isa = PBXBuildFile; fileRef = 767AB7581DD01C9900B3DA28 /* MASConstraintMaker.m */; };
@@ -182,6 +186,9 @@
 		767CD2811DEC5FAD00C7338F /* STPickerViewConst.m in Sources */ = {isa = PBXBuildFile; fileRef = 767CD27C1DEC5FAD00C7338F /* STPickerViewConst.m */; };
 		767CD2821DEC5FAD00C7338F /* STPickerViewUI.m in Sources */ = {isa = PBXBuildFile; fileRef = 767CD27E1DEC5FAD00C7338F /* STPickerViewUI.m */; };
 		767CD2831DEC5FAD00C7338F /* UIView+STFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 767CD2801DEC5FAD00C7338F /* UIView+STFrame.m */; };
+		767CFE9C1EF15D6A00CDB844 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 767CFE9B1EF15D6A00CDB844 /* QuickLook.framework */; };
+		767CFE9F1EF15D8F00CDB844 /* CGMeIntroduceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 767CFE9E1EF15D8F00CDB844 /* CGMeIntroduceViewController.m */; };
+		767CFEA11EF163CD00CDB844 /* 测量方法.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 767CFEA01EF163CD00CDB844 /* 测量方法.pdf */; };
 		767D2DCE1E1BD56B00F18CC7 /* weight.plist in Resources */ = {isa = PBXBuildFile; fileRef = 767D2DCD1E1BD56B00F18CC7 /* weight.plist */; };
 		767D2DD21E1C9CBA00F18CC7 /* BMI.plist in Resources */ = {isa = PBXBuildFile; fileRef = 767D2DD11E1C9CBA00F18CC7 /* BMI.plist */; };
 		767E3F4C1E8545EA00C91EA6 /* ChildManageTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 767E3F4B1E8545EA00C91EA6 /* ChildManageTableViewController.m */; };
@@ -268,6 +275,12 @@
 		76EA80DE1E14BAF90090EECB /* Charts.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 76EA80D81E14BAEB0090EECB /* Charts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		76EA80E41E14BB160090EECB /* test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EA80E31E14BB160090EECB /* test.swift */; };
 		76EA80E71E14BBF10090EECB /* SYNavigationDropdownMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 76EA80E61E14BBF10090EECB /* SYNavigationDropdownMenu.m */; };
+		76F78E591ED47524001A01A0 /* CGRecommend.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 76F78E581ED47524001A01A0 /* CGRecommend.storyboard */; };
+		76F78E641ED476D6001A01A0 /* CFDropDownMenuView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 76F78E5B1ED476D6001A01A0 /* CFDropDownMenuView.bundle */; };
+		76F78E651ED476D6001A01A0 /* CFDropDownMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F78E5E1ED476D6001A01A0 /* CFDropDownMenuView.m */; };
+		76F78E661ED476D6001A01A0 /* CFLabelOnLeftButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F78E601ED476D6001A01A0 /* CFLabelOnLeftButton.m */; };
+		76F78E671ED476D6001A01A0 /* UIView+CFFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F78E631ED476D6001A01A0 /* UIView+CFFrame.m */; };
+		76F78E6A1ED47789001A01A0 /* CGRecommendViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 76F78E691ED47789001A01A0 /* CGRecommendViewController.m */; };
 		76FBF2BE1E5553530044882E /* XMGLoginViewController-1.m in Sources */ = {isa = PBXBuildFile; fileRef = 76FBF2BD1E5553530044882E /* XMGLoginViewController-1.m */; };
 		76FBF2D21E55538E0044882E /* MBProgressHUD+XMG.m in Sources */ = {isa = PBXBuildFile; fileRef = 76FBF2CE1E55538E0044882E /* MBProgressHUD+XMG.m */; };
 		76FBF2D31E55538E0044882E /* MBProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 76FBF2CF1E55538E0044882E /* MBProgressHUD.bundle */; };
@@ -356,6 +369,11 @@
 		762CC2821DDB2379001E70E6 /* View2TableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View2TableViewCell.m; sourceTree = "<group>"; };
 		762CC2841DDB2D2A001E70E6 /* View2UIButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = View2UIButton.h; sourceTree = "<group>"; };
 		762CC2851DDB2D2A001E70E6 /* View2UIButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = View2UIButton.m; sourceTree = "<group>"; };
+		763E32671EFBA1AE00315BB3 /* hospital.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = hospital.plist; sourceTree = "<group>"; };
+		763E326C1EFBAA4600315BB3 /* CGCity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGCity.h; sourceTree = "<group>"; };
+		763E326D1EFBAA4600315BB3 /* CGCity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGCity.m; sourceTree = "<group>"; };
+		763E32721EFBAAF000315BB3 /* CGHospital.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGHospital.h; sourceTree = "<group>"; };
+		763E32731EFBAAF000315BB3 /* CGHospital.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGHospital.m; sourceTree = "<group>"; };
 		76483B841E23365600887B00 /* headc.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = headc.plist; sourceTree = "<group>"; };
 		76483BA01E236EC200887B00 /* test.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = test.plist; sourceTree = "<group>"; };
 		764908F71DDC0694003A57F2 /* CGHome.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CGHome.storyboard; sourceTree = "<group>"; };
@@ -576,6 +594,7 @@
 		767505111E79173400FF2029 /* percentImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = percentImageView.m; sourceTree = "<group>"; };
 		767505141E797BDE00FF2029 /* listCellItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = listCellItem.h; sourceTree = "<group>"; };
 		767505151E797BDE00FF2029 /* listCellItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = listCellItem.m; sourceTree = "<group>"; };
+		7678E6F11ECECA28005083D3 /* Earlydata.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Earlydata.plist; sourceTree = "<group>"; };
 		767AB7521DD01C9900B3DA28 /* MASCompositeConstraint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASCompositeConstraint.h; sourceTree = "<group>"; };
 		767AB7531DD01C9900B3DA28 /* MASCompositeConstraint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASCompositeConstraint.m; sourceTree = "<group>"; };
 		767AB7541DD01C9900B3DA28 /* MASConstraint+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MASConstraint+Private.h"; sourceTree = "<group>"; };
@@ -632,6 +651,10 @@
 		767CD27E1DEC5FAD00C7338F /* STPickerViewUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STPickerViewUI.m; sourceTree = "<group>"; };
 		767CD27F1DEC5FAD00C7338F /* UIView+STFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+STFrame.h"; sourceTree = "<group>"; };
 		767CD2801DEC5FAD00C7338F /* UIView+STFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+STFrame.m"; sourceTree = "<group>"; };
+		767CFE9B1EF15D6A00CDB844 /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
+		767CFE9D1EF15D8F00CDB844 /* CGMeIntroduceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGMeIntroduceViewController.h; sourceTree = "<group>"; };
+		767CFE9E1EF15D8F00CDB844 /* CGMeIntroduceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGMeIntroduceViewController.m; sourceTree = "<group>"; };
+		767CFEA01EF163CD00CDB844 /* 测量方法.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "测量方法.pdf"; sourceTree = "<group>"; };
 		767D2DCD1E1BD56B00F18CC7 /* weight.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = weight.plist; sourceTree = "<group>"; };
 		767D2DD11E1C9CBA00F18CC7 /* BMI.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = BMI.plist; sourceTree = "<group>"; };
 		767E3F4A1E8545EA00C91EA6 /* ChildManageTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildManageTableViewController.h; sourceTree = "<group>"; };
@@ -795,6 +818,17 @@
 		76EA80E31E14BB160090EECB /* test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = test.swift; sourceTree = "<group>"; };
 		76EA80E51E14BBF10090EECB /* SYNavigationDropdownMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SYNavigationDropdownMenu.h; path = "../../../../Users/WD/Downloads/SYNavigationDropdownMenu-master/SYNavigationDropdownMenu/SYNavigationDropdownMenu/SYNavigationDropdownMenu.h"; sourceTree = "<group>"; };
 		76EA80E61E14BBF10090EECB /* SYNavigationDropdownMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SYNavigationDropdownMenu.m; path = "../../../../Users/WD/Downloads/SYNavigationDropdownMenu-master/SYNavigationDropdownMenu/SYNavigationDropdownMenu/SYNavigationDropdownMenu.m"; sourceTree = "<group>"; };
+		76F78E581ED47524001A01A0 /* CGRecommend.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = CGRecommend.storyboard; sourceTree = "<group>"; };
+		76F78E5B1ED476D6001A01A0 /* CFDropDownMenuView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CFDropDownMenuView.bundle; sourceTree = "<group>"; };
+		76F78E5D1ED476D6001A01A0 /* CFDropDownMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFDropDownMenuView.h; sourceTree = "<group>"; };
+		76F78E5E1ED476D6001A01A0 /* CFDropDownMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFDropDownMenuView.m; sourceTree = "<group>"; };
+		76F78E5F1ED476D6001A01A0 /* CFLabelOnLeftButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFLabelOnLeftButton.h; sourceTree = "<group>"; };
+		76F78E601ED476D6001A01A0 /* CFLabelOnLeftButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CFLabelOnLeftButton.m; sourceTree = "<group>"; };
+		76F78E611ED476D6001A01A0 /* CFMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CFMacro.h; sourceTree = "<group>"; };
+		76F78E621ED476D6001A01A0 /* UIView+CFFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+CFFrame.h"; sourceTree = "<group>"; };
+		76F78E631ED476D6001A01A0 /* UIView+CFFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+CFFrame.m"; sourceTree = "<group>"; };
+		76F78E681ED47789001A01A0 /* CGRecommendViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGRecommendViewController.h; sourceTree = "<group>"; };
+		76F78E691ED47789001A01A0 /* CGRecommendViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGRecommendViewController.m; sourceTree = "<group>"; };
 		76FBF2BC1E5553530044882E /* XMGLoginViewController-1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XMGLoginViewController-1.h"; sourceTree = "<group>"; };
 		76FBF2BD1E5553530044882E /* XMGLoginViewController-1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XMGLoginViewController-1.m"; sourceTree = "<group>"; };
 		76FBF2CD1E55538E0044882E /* MBProgressHUD+XMG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+XMG.h"; sourceTree = "<group>"; };
@@ -809,6 +843,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				767CFE9C1EF15D6A00CDB844 /* QuickLook.framework in Frameworks */,
 				7680238E1E7A68F9006ED3E5 /* libsqlite3.0.tbd in Frameworks */,
 				7674D68C1EAF37550080DEC6 /* ImageIO.framework in Frameworks */,
 				7667EA611EA9EA8100D4547B /* libz.1.2.8.tbd in Frameworks */,
@@ -927,6 +962,17 @@
 				762A42091DED5FEA00CCD154 /* CGHeadc.m */,
 				762A420B1DED65C700CCD154 /* CGBMI.h */,
 				762A420C1DED65C700CCD154 /* CGBMI.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		763E326B1EFBAA1300315BB3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				763E326C1EFBAA4600315BB3 /* CGCity.h */,
+				763E326D1EFBAA4600315BB3 /* CGCity.m */,
+				763E32721EFBAAF000315BB3 /* CGHospital.h */,
+				763E32731EFBAAF000315BB3 /* CGHospital.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1442,6 +1488,16 @@
 			name = STConfig;
 			sourceTree = "<group>";
 		};
+		767CFE981EF15C8300CDB844 /* 曲线介绍测量教程 */ = {
+			isa = PBXGroup;
+			children = (
+				767CFEA01EF163CD00CDB844 /* 测量方法.pdf */,
+				767CFE9D1EF15D8F00CDB844 /* CGMeIntroduceViewController.h */,
+				767CFE9E1EF15D8F00CDB844 /* CGMeIntroduceViewController.m */,
+			);
+			name = "曲线介绍测量教程";
+			sourceTree = "<group>";
+		};
 		767E3F471E85453A00C91EA6 /* 儿童管理 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1458,6 +1514,7 @@
 		7680238C1E7A68F9006ED3E5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				767CFE9B1EF15D6A00CDB844 /* QuickLook.framework */,
 				7674D68B1EAF37550080DEC6 /* ImageIO.framework */,
 				7667EA601EA9EA8100D4547B /* libz.1.2.8.tbd */,
 				7667EA5E1EA9EA7300D4547B /* libicucore.A.tbd */,
@@ -1816,6 +1873,7 @@
 				765796751E59376E00619E25 /* regeist(登录注册) */,
 				762A42011DED5F9800CCD154 /* Model */,
 				767CD26E1DEC5D8E00C7338F /* Date(日期) */,
+				76F78E551ED47262001A01A0 /* Recommend(专家推荐) */,
 				760F31461DE29AAF003358BC /* Consult(咨询) */,
 				761777501DD9E68700B9DE7A /* Footprint(足迹) */,
 				7617774E1DD9E2E400B9DE7A /* SYNavigationDropdownMenu */,
@@ -1845,11 +1903,13 @@
 			children = (
 				7689BA731E65250A005DE408 /* PrefixHeader.pch */,
 				765054DA1DCB1D0200B2FE05 /* index.js */,
+				7678E6F11ECECA28005083D3 /* Earlydata.plist */,
 				765054D91DCB1CF900B2FE05 /* ChartJS-Prefix.pch */,
 				76970ACC1DBA46BD00102DE3 /* main.m */,
 				762944571E767A7E0027DF21 /* percentUnscramble.plist */,
 				761777431DD9A78D00B9DE7A /* height.plist */,
 				767D2DCD1E1BD56B00F18CC7 /* weight.plist */,
+				763E32671EFBA1AE00315BB3 /* hospital.plist */,
 				767D2DD11E1C9CBA00F18CC7 /* BMI.plist */,
 				76483B841E23365600887B00 /* headc.plist */,
 				76483BA01E236EC200887B00 /* test.plist */,
@@ -1877,8 +1937,9 @@
 				7681FE031E5D716200CCE368 /* 签到 */,
 				767E3F471E85453A00C91EA6 /* 儿童管理 */,
 				7608E76A1DE574370086F444 /* 个人信息 */,
-				761E47CC1DD050B600B69C21 /* CGMe.plist */,
+				767CFE981EF15C8300CDB844 /* 曲线介绍测量教程 */,
 				76597EFA1DD2FBFA00888011 /* CGMe.storyboard */,
+				761E47CC1DD050B600B69C21 /* CGMe.plist */,
 				765C2F091EB0BD89005FEBE5 /* feedBackViewController.h */,
 				765C2F0A1EB0BD89005FEBE5 /* feedBackViewController.m */,
 				761E47C91DD04DDB00B69C21 /* CGMeTableViewController.h */,
@@ -1926,6 +1987,41 @@
 				76EA80DC1E14BAEB0090EECB /* ChartsTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		76F78E551ED47262001A01A0 /* Recommend(专家推荐) */ = {
+			isa = PBXGroup;
+			children = (
+				763E326B1EFBAA1300315BB3 /* Model */,
+				76F78E5A1ED476D6001A01A0 /* CFDropDownMenuView */,
+				76F78E581ED47524001A01A0 /* CGRecommend.storyboard */,
+				76F78E681ED47789001A01A0 /* CGRecommendViewController.h */,
+				76F78E691ED47789001A01A0 /* CGRecommendViewController.m */,
+			);
+			name = "Recommend(专家推荐)";
+			sourceTree = "<group>";
+		};
+		76F78E5A1ED476D6001A01A0 /* CFDropDownMenuView */ = {
+			isa = PBXGroup;
+			children = (
+				76F78E5B1ED476D6001A01A0 /* CFDropDownMenuView.bundle */,
+				76F78E5C1ED476D6001A01A0 /* Lib */,
+			);
+			path = CFDropDownMenuView;
+			sourceTree = "<group>";
+		};
+		76F78E5C1ED476D6001A01A0 /* Lib */ = {
+			isa = PBXGroup;
+			children = (
+				76F78E5D1ED476D6001A01A0 /* CFDropDownMenuView.h */,
+				76F78E5E1ED476D6001A01A0 /* CFDropDownMenuView.m */,
+				76F78E5F1ED476D6001A01A0 /* CFLabelOnLeftButton.h */,
+				76F78E601ED476D6001A01A0 /* CFLabelOnLeftButton.m */,
+				76F78E611ED476D6001A01A0 /* CFMacro.h */,
+				76F78E621ED476D6001A01A0 /* UIView+CFFrame.h */,
+				76F78E631ED476D6001A01A0 /* UIView+CFFrame.m */,
+			);
+			path = Lib;
 			sourceTree = "<group>";
 		};
 		76FBF2CC1E55538E0044882E /* MBProgressHUD */ = {
@@ -2036,11 +2132,14 @@
 				76970ADB1DBA46BD00102DE3 /* Assets.xcassets in Resources */,
 				76695BEB1EC5625800435D12 /* Address.plist in Resources */,
 				767D2DCE1E1BD56B00F18CC7 /* weight.plist in Resources */,
+				76F78E591ED47524001A01A0 /* CGRecommend.storyboard in Resources */,
 				761777521DD9E6CF00B9DE7A /* CGFootprint.storyboard in Resources */,
+				76F78E641ED476D6001A01A0 /* CFDropDownMenuView.bundle in Resources */,
 				7674D6891EAF36D70080DEC6 /* ShareSDK.bundle in Resources */,
 				76597EFB1DD2FBFA00888011 /* CGMe.storyboard in Resources */,
 				7672E4761E6FF4760046747E /* MGroupCell.xib in Resources */,
 				765054B11DCB1B5A00B2FE05 /* CGGrowthchart.storyboard in Resources */,
+				763E32681EFBA1AE00315BB3 /* hospital.plist in Resources */,
 				76597EFD1DD40E6100888011 /* CGChartType.plist in Resources */,
 				7672E4961E6FF4920046747E /* plus.png in Resources */,
 				768023A11E7A71C6006ED3E5 /* Info.plist in Resources */,
@@ -2069,6 +2168,7 @@
 				76FBF2D31E55538E0044882E /* MBProgressHUD.bundle in Resources */,
 				761E47CD1DD050B600B69C21 /* CGMe.plist in Resources */,
 				7672E4741E6FF4760046747E /* none.png in Resources */,
+				767CFEA11EF163CD00CDB844 /* 测量方法.pdf in Resources */,
 				767505081E79114600FF2029 /* percentImage.xib in Resources */,
 				7689BA4E1E652416005DE408 /* MJRefresh.bundle in Resources */,
 				767D2DD21E1C9CBA00F18CC7 /* BMI.plist in Resources */,
@@ -2081,6 +2181,7 @@
 				7689BA5D1E652416005DE408 /* PYPhotosView.bundle in Resources */,
 				7672E4971E6FF4920046747E /* plus@2x.png in Resources */,
 				7674D6791EAF36D70080DEC6 /* ShareSDKConfigFile.bundle in Resources */,
+				7678E6F21ECECA28005083D3 /* Earlydata.plist in Resources */,
 				7674D6851EAF36D70080DEC6 /* WeiboSDK.bundle in Resources */,
 				7672E4941E6FF4920046747E /* ico_check_select@2x.png in Resources */,
 				7672E4931E6FF4920046747E /* ico_check_select.png in Resources */,
@@ -2101,6 +2202,7 @@
 				767AB7721DD01C9900B3DA28 /* NSArray+MASAdditions.m in Sources */,
 				7672E47E1E6FF4760046747E /* SDLoopProgressView.m in Sources */,
 				7689BA481E652416005DE408 /* MJRefreshBackGifFooter.m in Sources */,
+				763E326E1EFBAA4600315BB3 /* CGCity.m in Sources */,
 				76970AD01DBA46BD00102DE3 /* AppDelegate.m in Sources */,
 				7662E4471DDD4E7000B5E627 /* NSObject+MJProperty.m in Sources */,
 				7689BA6D1E652416005DE408 /* UIImage+MultiFormat.m in Sources */,
@@ -2133,11 +2235,14 @@
 				7689BA671E652416005DE408 /* SDWebImageDownloader.m in Sources */,
 				7689BA401E652415005DE408 /* MJRefreshAutoFooter.m in Sources */,
 				7689BA4A1E652416005DE408 /* MJRefreshBackStateFooter.m in Sources */,
+				76F78E651ED476D6001A01A0 /* CFDropDownMenuView.m in Sources */,
 				76C34C7A1DE4211600EBE7EF /* ConsultDetailTableViewController.m in Sources */,
 				765796811E59379B00619E25 /* MMZCViewController.m in Sources */,
 				7689BA591E652416005DE408 /* PYPhotosViewController.m in Sources */,
 				765054F91DCB20F700B2FE05 /* TWRDataSet+Strings.m in Sources */,
+				76F78E671ED476D6001A01A0 /* UIView+CFFrame.m in Sources */,
 				7689BA5B1E652416005DE408 /* PYConst.m in Sources */,
+				767CFE9F1EF15D8F00CDB844 /* CGMeIntroduceViewController.m in Sources */,
 				767AB7701DD01C9900B3DA28 /* MASViewAttribute.m in Sources */,
 				7662E4441DDD4E7000B5E627 /* NSObject+MJClass.m in Sources */,
 				767AB76F1DD01C9900B3DA28 /* MASLayoutConstraint.m in Sources */,
@@ -2175,6 +2280,7 @@
 				76695BEC1EC5625800435D12 /* LZCityPickerController.m in Sources */,
 				767AB76C1DD01C9900B3DA28 /* MASCompositeConstraint.m in Sources */,
 				7608E76F1DE57ADA0086F444 /* MeDetailTableViewController.m in Sources */,
+				76F78E661ED476D6001A01A0 /* CFLabelOnLeftButton.m in Sources */,
 				7689BA641E652416005DE408 /* SDImageCache.m in Sources */,
 				7689BA6E1E652416005DE408 /* UIImage+WebP.m in Sources */,
 				7689BA491E652416005DE408 /* MJRefreshBackNormalFooter.m in Sources */,
@@ -2211,6 +2317,7 @@
 				761C751B1DD43C1900AC4872 /* CGDetailViewController.m in Sources */,
 				7689BA5A1E652416005DE408 /* PYPhoto.m in Sources */,
 				7612FF221DE2D5DE0094859D /* Consult.m in Sources */,
+				763E32741EFBAAF000315BB3 /* CGHospital.m in Sources */,
 				765796871E5938BB00619E25 /* forgetPassWardViewController.m in Sources */,
 				765054E31DCB1D6800B2FE05 /* CGGrowthchartViewController.m in Sources */,
 				7612FF1F1DE2D4DC0094859D /* ConsultCell.m in Sources */,
@@ -2245,6 +2352,7 @@
 				7689BA681E652416005DE408 /* SDWebImageDownloaderOperation.m in Sources */,
 				767E3F4C1E8545EA00C91EA6 /* ChildManageTableViewController.m in Sources */,
 				7680239E1E7A71C6006ED3E5 /* FMDatabasePool.m in Sources */,
+				76F78E6A1ED47789001A01A0 /* CGRecommendViewController.m in Sources */,
 				767AB76E1DD01C9900B3DA28 /* MASConstraintMaker.m in Sources */,
 				7672E43D1E6FDEBF0046747E /* HTextViewCell.m in Sources */,
 				765DF5D71DE03FCA002473F1 /* YSProgressView.m in Sources */,

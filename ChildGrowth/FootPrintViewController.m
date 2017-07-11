@@ -225,7 +225,7 @@ NSString *sql = @"insert into zujicell (ChildId,time,type,height,weight,headc,de
         //数据模型 => ViewModel(包含cell子控件的Frame)
         for (listCellItem *cellItem in cellItems) {
             MomentViewModel *momentFrame = [[MomentViewModel alloc] init];
-            if (cellItem.ChildId == child.ChildId) {
+            if (cellItem.ChildId == [child.ChildId integerValue]) {
                 momentFrame.cellItem = cellItem;
                 [momentFrames addObject:momentFrame];
             }
@@ -333,11 +333,12 @@ NSString *sql = @"insert into zujicell (ChildId,time,type,height,weight,headc,de
 //}
 
 -(void)addNewItemVC:(addNewItemTableViewController *)addnewitemVC cellItem:(listCellItem *)cellItem{
+    
     //保存存放的数据(修改模型)
 //    self.cellItem = cellItem;
     CGChildModel *child = self.childs[[self.childindex intValue]];
-    cellItem.ChildId = child.ChildId;
-    [self addcellzujiItem:cellItem];
+    cellItem.ChildId = [child.ChildId integerValue];
+    [self addcellzujiItem:cellItem];  //添加到足迹数据库
 //    [self writeAllChildInfortoPlist];
     //刷新图表
 //    [self loadNewData];

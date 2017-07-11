@@ -153,7 +153,7 @@
     [MBProgressHUD showMessage:@"正在添加..." toView:self.view];
     //post测试
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/addChildID"];
+    NSString *urlstring = [NSString stringWithFormat:@"http://121.40.89.113/childGrow/Mobile/addChildID"];
     NSURL *url = [NSURL URLWithString:urlstring];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
     NSString *parmStr = [NSString stringWithFormat:@"userAccount=%@&childID=%@&childName=%@&childBirthdate=%@&childSex=%@&token=%@",self.userAccount,childid.text,name.text,childBirthdate,childSex,self.token];

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>cityName</key>
+		<string>杭州市</string>
+		<key>hospitalArr</key>
+		<array>
+			<dict>
+				<key>hospitalName</key>
+				<string>浙医二院</string>
+				<key>doctorArr</key>
+				<array>
+					<string>医生1</string>
+					<string>医生2</string>
+					<string>医生3</string>
+					<string>医生4</string>
+				</array>
+			</dict>
+			<dict>
+				<key>hospitalName</key>
+				<string>浙医一院</string>
+				<key>doctorArr</key>
+				<array>
+					<string>医生1</string>
+					<string>医生2</string>
+					<string>医生3</string>
+					<string>医生4</string>
+				</array>
+			</dict>
+			<dict>
+				<key>hospitalName</key>
+				<string>浙江省人民医院 </string>
+				<key>doctorArr</key>
+				<array>
+					<string>医生1</string>
+					<string>医生2</string>
+					<string>医生3</string>
+					<string>医生4</string>
+				</array>
+			</dict>
+		</array>
+	</dict>
+	<dict>
+		<key>cityName</key>
+		<string>宁波市</string>
+		<key>hospitalArr</key>
+		<array>
+			<dict>
+				<key>hospitalName</key>
+				<string>宁波第一医院</string>
+				<key>doctorArr</key>
+				<array>
+					<string>医生1</string>
+					<string>医生2</string>
+					<string>医生3</string>
+					<string>医生4</string>
+				</array>
+			</dict>
+			<dict>
+				<key>hospitalName</key>
+				<string>宁波第二医院</string>
+				<key>doctorArr</key>
+				<array>
+					<string>医生1</string>
+					<string>医生2</string>
+					<string>医生3</string>
+					<string>医生4</string>
+				</array>
+			</dict>
+			<dict>
+				<key>hospitalName</key>
+				<string>李惠利医院 </string>
+				<key>doctorArr</key>
+				<array>
+					<string>医生1</string>
+					<string>医生2</string>
+					<string>医生3</string>
+					<string>医生4</string>
+				</array>
+			</dict>
+		</array>
+	</dict>
+</array>
+</plist>

@@ -19,54 +19,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ChildGrowth/CGGrowthchartViewController.m"
-            timestampString = "514904760.082598"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2891"
-            endingLineNumber = "2891"
-            landmarkName = "-addinforVC:weightItem:"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__53-[CGGrowthchartViewController addinforVC:weightItem:]_block_invoke"
-                  moduleName = "ChildGrowth"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/WD/Desktop/ChildGrowth/ChildGrowth/CGGrowthchartViewController.m"
-                  timestampString = "516521429.631709"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2891"
-                  endingLineNumber = "2891"
-                  offsetFromSymbolStart = "550">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__53-[CGGrowthchartViewController addinforVC:weightItem:]_block_invoke_2"
-                  moduleName = "ChildGrowth"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/WD/Desktop/ChildGrowth/ChildGrowth/CGGrowthchartViewController.m"
-                  timestampString = "516521429.634364"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2891"
-                  endingLineNumber = "2891"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "ChildGrowth/MMZCViewController.m"
             timestampString = "514900484.420345"
             startingColumnNumber = "9223372036854775807"
@@ -83,45 +35,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "ChildGrowth/CGGrowthchartViewController.m"
-            timestampString = "514904760.082598"
+            filePath = "ChildGrowth/ChildManageTableViewController.m"
+            timestampString = "516597044.976968"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2816"
-            endingLineNumber = "2816"
-            landmarkName = "-addinforVC:weightItem:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChildGrowth/CGGrowthchartViewController.m"
-            timestampString = "514904760.082598"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2780"
-            endingLineNumber = "2780"
-            landmarkName = "-addinforVC:weightItem:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ChildGrowth/FirstCell.m"
-            timestampString = "514973602.707294"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "-headerimage"
+            startingLineNumber = "253"
+            endingLineNumber = "253"
+            landmarkName = "-addChildinfo:childItem:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

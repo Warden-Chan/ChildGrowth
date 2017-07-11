@@ -66,7 +66,7 @@
         self.view3 = [[[NSBundle mainBundle] loadNibNamed:@"View2" owner:nil options:nil] lastObject];
         NSString *imagename3 = @"19-gear";
         self.view3.imageview.image = [UIImage imageNamed:imagename3];
-      self.view3.lable.text = @"设置";
+      self.view3.lable.text = @"退出登录";
         self.view3.tag = 23;
          [self.view3 addTarget:self action:@selector(ButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:self.view3];

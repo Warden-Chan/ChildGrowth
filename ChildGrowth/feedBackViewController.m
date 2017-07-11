@@ -37,7 +37,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor =[UIColor whiteColor];
+    _TimeNUMX = [self BackTimeNUMX];
+    _TimeNUMY = [self BackTimeNUMY];
     [self creatUI];
+
+//    [self updateViewsFrame];
 }
 -(void)creatUI{
 
@@ -50,7 +54,7 @@
     [_noteTextView setTextColor:[UIColor blackColor]];
     _noteTextView.delegate = self;
     _noteTextView.font = [UIFont boldSystemFontOfSize:15.5];
-    _noteTextView.placeholder= @"  选填，可以添加文字或照片";
+    _noteTextView.placeholder= @"  添加文字";
     self.noteTextView.returnKeyType = UIReturnKeyDone;
     [self.noteTextView setPlaceholderColor:[UIColor lightGrayColor]];
     [self.noteTextView setPlaceholderOpacity:1];
@@ -64,6 +68,8 @@
     _textNumberLabel.backgroundColor = [UIColor whiteColor];
     _textNumberLabel.text = [NSString stringWithFormat:@"0/%d    ",kMaxTextCount];
     [self.view addSubview:_textNumberLabel];
+    
+    [self updateViewsFrame];
 }
 -(void)submit{
     [self.navigationController popViewControllerAnimated:YES];
@@ -108,7 +114,7 @@
     //    _noteTextBackgroudView.frame = CGRectMake(0, 0, WidthVC, 30*_TimeNUMY);
     
     //文本编辑框
-    _noteTextView.frame = CGRectMake(0, 10*_TimeNUMY, WidthVC, noteTextHeight);
+    _noteTextView.frame = CGRectMake(0,105*_TimeNUMY, WidthVC, noteTextHeight);
     
     //文字个数提示Label
     _textNumberLabel.frame = CGRectMake(0, _noteTextView.frame.origin.y + _noteTextView.frame.size.height-15*_TimeNUMY, WidthVC-10*_TimeNUMX, 15*_TimeNUMY);
@@ -120,7 +126,7 @@
 -(void)resumeOriginalFrame{
     //    _noteTextBackgroudView.frame = CGRectMake(0, 0, WidthVC, 200*_TimeNUMY);
     //文本编辑框
-    _noteTextView.frame = CGRectMake(0, 40*_TimeNUMY, WidthVC, noteTextHeight);
+    _noteTextView.frame = CGRectMake(0, 105*_TimeNUMY, WidthVC, noteTextHeight);
     
     //文字个数提示Label
     _textNumberLabel.frame = CGRectMake(0, _noteTextView.frame.origin.y + _noteTextView.frame.size.height-15*_TimeNUMY      , WidthVC-10*_TimeNUMX, 15*_TimeNUMY);
@@ -183,7 +189,49 @@
     
     [self updateViewsFrame];
 }
-
+#pragma mark 返回不同型号的机器的倍数值
+- (float)BackTimeNUMX {
+    float numX = 0.0;
+    if (iphone4) {
+        numX = 320 / 375.0;
+        return numX;
+    }
+    if (iphone5) {
+        numX = 320 / 375.0;
+        return numX;
+    }
+    if (iphone6) {
+        return 1.0;
+    }
+    if (iphone6plus) {
+        numX = 414 / 375.0;
+        return numX;
+    }
+    return numX;
+}
+- (float)BackTimeNUMY {
+    float numY = 0.0;
+    if (iphone4) {
+        numY = 480 / 667.0;
+        _FontSIZE = -2;
+        return numY;
+    }
+    if (iphone5) {
+        numY = 568 / 667.0;
+        _FontSIZE = -2;
+        return numY;
+    }
+    if (iphone6) {
+        _FontSIZE = 0;
+        return 1.0;
+    }
+    if (iphone6plus) {
+        numY = 736 / 667.0;
+        _FontSIZE = 2;
+        return numY;
+    }
+    return numY;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

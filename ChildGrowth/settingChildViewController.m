@@ -187,7 +187,7 @@
     [MBProgressHUD showMessage:@"正在注册..." toView:self.view];
     //post测试
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/register"];
+    NSString *urlstring = [NSString stringWithFormat:@"http://121.40.89.113/childGrow/Mobile/register"];
     NSURL *url = [NSURL URLWithString:urlstring];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
     NSString *parmStr = [NSString stringWithFormat:@"userAccount=%@&userPassword=%@&userName=%@&childID=%@&childName=%@&childBirthdate=%@&childSex=%@",self.userAccount,self.userPassword,self.userName,childid.text,name.text,childBirthdate,childSex];
@@ -449,8 +449,8 @@
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    [name resignFirstResponder];
-    [childid resignFirstResponder];
+//    [name resignFirstResponder];
+//    [childid resignFirstResponder];
     
     if (textField == age) {
         [age resignFirstResponder];

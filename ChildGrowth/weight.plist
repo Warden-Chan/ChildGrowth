@@ -5965,7 +5965,7 @@
 				<array>
 					<array>
 						<real>2.4</real>
-						<string>3.2</string>
+						<real>3.2</real>
 						<integer>4</integer>
 						<real>4.6</real>
 						<real>5.1</real>
@@ -5991,7 +5991,7 @@
 						<real>9.199999999999999</real>
 					</array>
 					<array>
-						<string>2.8</string>
+						<real>2.8</real>
 						<real>3.6</real>
 						<real>4.5</real>
 						<real>5.1</real>
@@ -6018,7 +6018,7 @@
 						<real>10.1</real>
 					</array>
 					<array>
-						<string>3.2</string>
+						<real>3.2</real>
 						<real>4.2</real>
 						<real>5.1</real>
 						<real>5.8</real>
@@ -6045,7 +6045,7 @@
 						<real>11.5</real>
 					</array>
 					<array>
-						<string>3.7</string>
+						<real>3.7</real>
 						<real>4.8</real>
 						<real>5.9</real>
 						<real>6.7</real>
@@ -6072,7 +6072,7 @@
 						<real>13.1</real>
 					</array>
 					<array>
-						<string>4.2</string>
+						<real>4.2</real>
 						<real>5.4</real>
 						<real>6.5</real>
 						<real>7.4</real>
@@ -6421,7 +6421,7 @@
 				<array>
 					<array>
 						<real>2.4</real>
-						<string>3.2</string>
+						<real>3.2</real>
 						<integer>4</integer>
 						<real>4.6</real>
 						<real>5.1</real>
@@ -6483,7 +6483,7 @@
 						<integer>14</integer>
 					</array>
 					<array>
-						<string>2.8</string>
+						<real>2.8</real>
 						<real>3.6</real>
 						<real>4.5</real>
 						<real>5.1</real>
@@ -6546,7 +6546,7 @@
 						<real>15.7</real>
 					</array>
 					<array>
-						<string>3.2</string>
+						<real>3.2</real>
 						<real>4.2</real>
 						<real>5.1</real>
 						<real>5.8</real>
@@ -6609,7 +6609,7 @@
 						<real>18.2</real>
 					</array>
 					<array>
-						<string>3.7</string>
+						<real>3.7</real>
 						<real>4.8</real>
 						<real>5.9</real>
 						<real>6.7</real>
@@ -6672,7 +6672,7 @@
 						<real>21.3</real>
 					</array>
 					<array>
-						<string>4.2</string>
+						<real>4.2</real>
 						<real>5.4</real>
 						<real>6.5</real>
 						<real>7.4</real>
@@ -7357,7 +7357,7 @@
 				<array>
 					<array>
 						<real>2.4</real>
-						<string>3.2</string>
+						<real>3.2</real>
 						<integer>4</integer>
 						<real>4.6</real>
 						<real>5.1</real>
@@ -7479,7 +7479,7 @@
 						<real>23.7</real>
 					</array>
 					<array>
-						<string>2.8</string>
+						<real>2.8</real>
 						<real>3.6</real>
 						<real>4.5</real>
 						<real>5.1</real>
@@ -7602,7 +7602,7 @@
 						<real>26.9</real>
 					</array>
 					<array>
-						<string>3.2</string>
+						<real>3.2</real>
 						<real>4.2</real>
 						<real>5.1</real>
 						<real>5.8</real>
@@ -7725,7 +7725,7 @@
 						<real>31.9</real>
 					</array>
 					<array>
-						<string>3.7</string>
+						<real>3.7</real>
 						<real>4.8</real>
 						<real>5.9</real>
 						<real>6.7</real>
@@ -7848,7 +7848,7 @@
 						<real>38.5</real>
 					</array>
 					<array>
-						<string>4.2</string>
+						<real>4.2</real>
 						<real>5.4</real>
 						<real>6.5</real>
 						<real>7.4</real>

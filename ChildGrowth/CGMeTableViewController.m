@@ -14,7 +14,9 @@
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKUI/ShareSDK+SSUI.h>
 #import "feedBackViewController.h"
-@interface CGMeTableViewController ()<UITableViewDelegate,View2TableViewCellDelegate>
+//#import "CGMeIntroduceViewController.h"
+#import <QuickLook/QuickLook.h>
+@interface CGMeTableViewController ()<UITableViewDelegate,View2TableViewCellDelegate,QLPreviewControllerDelegate>
 /** 标签数据 */
 @property (nonatomic, strong) NSArray *Groups;
 @end
@@ -86,7 +88,7 @@ NSString *ID = @"view2cell";
             return 1;
             break;
         case 2:
-            return 3;
+            return 2;
             break;
         case 3:
             return 2;
@@ -125,11 +127,11 @@ NSString *ID = @"view2cell";
     }else{
         UITableViewCell *cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
         // 设置cell右边的指示样式
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        NSString *imagename1 = @"dropdown_anim__00053";
+        cell.accessoryType = UITableViewCellAccessoryNone;//UITableViewCellAccessoryDisclosureIndicator
+        NSString *imagename1 = @"add_friend_icon_offical";  //@"dropdown_anim__00053"
         cell.imageView.image = [UIImage imageNamed:imagename1];
-        cell.textLabel.text = @"昵称";
-        cell.detailTextLabel.text = @"省份-地区";
+        cell.textLabel.text = @"我的成长记";
+//        cell.detailTextLabel.text = @"省份-地区";
         return cell;
     }
    
@@ -150,7 +152,7 @@ NSString *ID = @"view2cell";
         {
             //跳转到下一个界面
             //手动去执行线(segue)
-            [self performSegueWithIdentifier:@"detailVC" sender:nil];
+//            [self performSegueWithIdentifier:@"detailVC" sender:nil];
         }
             break;
         case 2:
@@ -172,7 +174,32 @@ NSString *ID = @"view2cell";
         }
             break;
         case 3:
-            
+            switch (indexPath.row) {
+            case 0:
+        {
+            QLPreviewController *qlPreview = [[QLPreviewController alloc]init];
+            qlPreview.dataSource = self;
+            qlPreview.delegate =self;
+            [self presentViewController:qlPreview animated:YES completion:^{
+                
+            }];
+//            CGMeIntroduceViewController *VC = [[CGMeIntroduceViewController alloc]init];
+//            [self.navigationController pushViewController:VC animated:YES];
+            break;
+        }
+                case 1:
+                {
+                    QLPreviewController *qlPreview = [[QLPreviewController alloc]init];
+                    qlPreview.dataSource = self;
+                    qlPreview.delegate =self;
+                    [self presentViewController:qlPreview animated:YES completion:^{
+                        
+                    }];
+                    break;
+                }
+            default:
+            break;
+            }
             break;
         case 4:
         {
@@ -268,6 +295,17 @@ NSString *ID = @"view2cell";
         return 44;
     }
 }
+- (NSInteger)numberOfPreviewItemsInPreviewController:(QLPreviewController *)controller{
+    return 1;
+}
+- (id <QLPreviewItem>)previewController:(QLPreviewController *)controller previewItemAtIndex:(NSInteger)index{
+    // 加载数据
+    NSBundle *bundle = [NSBundle mainBundle];
+    NSString *path = [bundle pathForResource:@"测量方法" ofType:@"pdf"];
+    NSURL *url = [NSURL fileURLWithPath:path];
+    return url;
+    
+}
 #pragma mark - View2TableViewCellDelegate
 -(void)choseButton:(UIButton *)button{
     if(button.tag == 21){
@@ -283,6 +321,8 @@ NSString *ID = @"view2cell";
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
         //存储时，除NSNumber类型使用对应的类型意外，其他的都是使用setObject:forKey:
         [userDefaults removeObjectForKey:@"token"];
+        [userDefaults removeObjectForKey:@"userAccount"];
+        [userDefaults removeObjectForKey:@"userPassword"];
         //这里建议同步存储到磁盘中，但是不是必须的
         [userDefaults synchronize];
         UIWindow *window = [[[UIApplication sharedApplication]delegate]window];

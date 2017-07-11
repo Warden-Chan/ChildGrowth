@@ -95,14 +95,14 @@
     self.BMILabel.textColor = [UIColor orangeColor];
     if (BMIs.value.floatValue < 18.5) {
         self.sacleImageView.image = [UIImage imageNamed:@"scale2"];
-        self.BMILabel.text = [NSString stringWithFormat:@"BMI:%@ 体型偏瘦 超过%d%%同龄用户",BMIs.value,30];
+        self.BMILabel.text = [NSString stringWithFormat:@"BMI:%.1f 体型偏瘦 超过%d%%同龄用户",BMIs.value.floatValue,30];
 //        self.heightLabel.frame = CGRectMake(45, 30, 100, 24);
 //        self.weightLabel.frame = CGRectMake(180, 16, 100, 24);
 //        self.heightLabel.frame = CGRectMake(80, 20, 100, 24);
 //        self.weightLabel.frame = CGRectMake(290, 60, 100, 24);
     }else if (18.5 <= BMIs.value.floatValue && BMIs.value.floatValue<= 24.9){
         self.sacleImageView.image = [UIImage imageNamed:@"scale1"];
-        self.BMILabel.text = [NSString stringWithFormat:@"BMI:%@ 体型正常 超过%d%%同龄用户",BMIs.value,50];
+        self.BMILabel.text = [NSString stringWithFormat:@"BMI:%.1f 体型正常 超过%d%%同龄用户",BMIs.value.floatValue,50];
 //        CGRect heightLabelFrame = self.heightLabel.frame;
 //        CGRect weightLabelFrame = self.weightLabel.frame;
 //        heightLabelFrame.origin.y = 30;
@@ -111,7 +111,7 @@
 //        self.weightLabel.frame = CGRectMake(180, 24, 100, 24);
     }else{
         self.sacleImageView.image = [UIImage imageNamed:@"scale3"];
-        self.BMILabel.text = [NSString stringWithFormat:@"BMI:%@ 体型偏胖 超过%d%%同龄用户",BMIs.value,70];
+        self.BMILabel.text = [NSString stringWithFormat:@"BMI:%.1f 体型偏胖 超过%d%%同龄用户",BMIs.value.floatValue,70];
 //        self.heightLabel.frame = CGRectMake(45, 16, 100, 24);
 //        self.weightLabel.frame = CGRectMake(180, 30, 100, 24);
     }

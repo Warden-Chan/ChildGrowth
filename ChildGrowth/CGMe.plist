@@ -15,12 +15,6 @@
 			<key>text</key>
 			<string>好大夫在线</string>
 		</dict>
-		<dict>
-			<key>icon</key>
-			<string>MoreMyFavorites</string>
-			<key>text</key>
-			<string>收藏</string>
-		</dict>
 	</array>
 	<array>
 		<dict>

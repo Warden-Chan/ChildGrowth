@@ -145,7 +145,7 @@ NSString * const addIndentifier = @"addNewItemcell";
     NSIndexPath *indexPath = textField.indexPath;
     [self.arrayDataSouce replaceObjectAtIndex:indexPath.row withObject:textField.text];
 }
-
+#pragma mark 保存记录
 -(void)savebtnClick{
     //把记录内容到根控制器(FootPrintViewController)
     self.cellItem.type = self.type;
@@ -338,7 +338,7 @@ NSString * const addIndentifier = @"addNewItemcell";
                 _titleArray = @[@"身高：", @"体重：", @"头围："];
                 break;
             case 2:
-                _titleArray = @[@"姓名：", @"年龄：", @"工作地点："];
+                _titleArray = @[@"早餐：", @"午餐：", @"晚餐："];
                 break;
             default:
                 break;

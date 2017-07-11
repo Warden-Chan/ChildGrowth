@@ -23,6 +23,15 @@
 /** 性别 */
 @property (nonatomic, copy) NSString *sex;
 
+/** 父亲身高 */
+@property (nonatomic, copy) NSString *fatherHeight;
+
+/** 母亲身高 */
+@property (nonatomic, copy) NSString *motherHeight;
+
+/** 孕期 */
+@property (nonatomic, copy) NSNumber *oregnancy;
+
 /** 身高数组 */
 @property (nonatomic, retain) NSMutableArray *heightArr;
 

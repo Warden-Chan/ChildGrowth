@@ -60,7 +60,7 @@
     
     
     CGRect frame=[UIScreen mainScreen].bounds;
-    bgView1=[[UIView alloc]initWithFrame:CGRectMake(10, 110, frame.size.width-20, 120)];
+    bgView1=[[UIView alloc]initWithFrame:CGRectMake(10, 100, frame.size.width-20, 120)];
     bgView1.layer.cornerRadius=3.0;
     bgView1.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:bgView1];
@@ -122,7 +122,7 @@
     
 }
 -(void)create2PartTextFields{
-    UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(30, 235, self.view.frame.size.width-90, 30)];
+    UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(30, 225, self.view.frame.size.width-90, 30)];
     label.text=@"填写父母信息";
     label.textColor=[UIColor grayColor];
     label.textAlignment=UITextAlignmentLeft;
@@ -132,7 +132,7 @@
     
     
     CGRect frame=[UIScreen mainScreen].bounds;
-    bgView2=[[UIView alloc]initWithFrame:CGRectMake(10, 270, frame.size.width-20, 80)];
+    bgView2=[[UIView alloc]initWithFrame:CGRectMake(10, 250, frame.size.width-20, 80)];
     bgView2.layer.cornerRadius=3.0;
     bgView2.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:bgView2];
@@ -184,7 +184,7 @@
 //    [self.view addSubview:registerButton];
 }
 -(void)create3PartTextFields{
-    UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(30, 350 , self.view.frame.size.width-90, 30)];
+    UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(30, 330 , self.view.frame.size.width-90, 30)];
     label.text=@"孕期信息";
     label.textColor=[UIColor grayColor];
     label.textAlignment=UITextAlignmentLeft;
@@ -194,7 +194,7 @@
     
     
     CGRect frame=[UIScreen mainScreen].bounds;
-    bgView3=[[UIView alloc]initWithFrame:CGRectMake(10, 385, frame.size.width-20, 80)];
+    bgView3=[[UIView alloc]initWithFrame:CGRectMake(10, 355, frame.size.width-20, 80)];
     bgView3.layer.cornerRadius=3.0;
     bgView3.backgroundColor=[UIColor whiteColor];
     [self.view addSubview:bgView3];
@@ -254,10 +254,10 @@
         [MBProgressHUD showMessage:@"正在添加..." toView:self.view];
         //post测试
         NSURLSession *session = [NSURLSession sharedSession];
-        NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/addChildID"];
+        NSString *urlstring = [NSString stringWithFormat:@"http://121.40.89.113/childGrow/Mobile/addChildID"];
         NSURL *url = [NSURL URLWithString:urlstring];
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
-        NSString *parmStr = [NSString stringWithFormat:@"userAccount=%@&childID=%@&childName=%@&childBirthdate=%@&childSex=%@&token=%@&birthCity=%@&fullMonth=%@&fatherHeight=%@&motherHeight=%@",self.userAccount,self.childID,self.childName,childBirthdate,self.childSex,self.token,self.childCity,oregnancy.text,fatherHeight.text,motherHeight.text];
+        NSString *parmStr = [NSString stringWithFormat:@"userAccount=%@&childID=%@&childName=%@&childBirthdate=%@&childSex=%@&token=%@&birthCity=%@&fullMonth=%@&fatherHeight=%@&motherHeight=%@&birthHeight=%@&birthWeight=%@&birthHeadc=%@",self.userAccount,self.childID,self.childName,childBirthdate,self.childSex,self.token,self.childCity,oregnancy.text,fatherHeight.text,motherHeight.text,birthHeight.text,birthWeight.text,birthHeadc.text];
         NSData *data1 = [parmStr dataUsingEncoding:NSUTF8StringEncoding];
         [request setHTTPBody:data1];
         [request setHTTPMethod:@"POST"];
@@ -278,8 +278,11 @@
                 childmodel.name = self.childName;
                 childmodel.age = self.childBirth;
                 childmodel.sex = self.childSex;
+                childmodel.fatherHeight = fatherHeight.text;
+                childmodel.motherHeight = motherHeight.text;
+                childmodel.oregnancy = oregnancy.text;
                 [self.delegate addChildinfo:self childItem:childmodel];
-                [self.navigationController popViewControllerAnimated:YES];
+                [self.navigationController popToViewController: [self.navigationController.viewControllers objectAtIndex: ([self.navigationController.viewControllers count] -2)] animated:YES];
                 //                [self.navigationController popViewControllerAnimated:YES];
                 //            //隐藏HUD
                 //            [MBProgressHUD hideHUDForView:self.view];
@@ -315,10 +318,10 @@
     [MBProgressHUD showMessage:@"正在注册..." toView:self.view];
     //post测试
     NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlstring = [NSString stringWithFormat:@"http://192.168.1.121/childGrow/Mobile/register"];
+    NSString *urlstring = [NSString stringWithFormat:@"http://121.40.89.113/childGrow/Mobile/register"];
     NSURL *url = [NSURL URLWithString:urlstring];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:10];
-    NSString *parmStr = [NSString stringWithFormat:@"userAccount=%@&userPassword=%@&userName=%@&childID=%@&childName=%@&childBirthdate=%@&childSex=%@&birthCity=%@&fullMonth=%@&fatherHeight=%@&motherHeight=%@",self.userAccount,self.userPassword,self.userName,self.childID,self.childName,childBirthdate,self.childSex,self.childCity,oregnancy.text,fatherHeight.text,motherHeight.text];
+    NSString *parmStr = [NSString stringWithFormat:@"userAccount=%@&userPassword=%@&userName=%@&childID=%@&childName=%@&childBirthdate=%@&childSex=%@&birthCity=%@&fullMonth=%@&fatherHeight=%@&motherHeight=%@&birthHeight=%@&birthWeight=%@&birthHeadc=%@",self.userAccount,self.userPassword,self.userName,self.childID,self.childName,childBirthdate,self.childSex,self.childCity,oregnancy.text,fatherHeight.text,motherHeight.text,birthHeight.text,birthWeight.text,birthHeadc.text];
     NSData *data1 = [parmStr dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:data1];
     [request setHTTPMethod:@"POST"];
